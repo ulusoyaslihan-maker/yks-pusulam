@@ -11,6 +11,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='64' height='64' rx='14' fill='%230A1213'/%3E%3Ctext x='50%25' y='60%25' font-size='38' text-anchor='middle' fill='%236EE7B7' font-family='Georgia'%3EY%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Mulish:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
   :root{--ink:#0A1213;--ink-2:#0E1A1B;--panel:#12211F;--panel-2:#16292A;--glass:rgba(233,228,214,0.04);
     --brass:#C9A24B;--brass-dim:#8f7433;--parch:#E8E4D6;--parch-dim:#A9B0AA;--line:rgba(201,162,75,0.22);
@@ -167,15 +168,28 @@
   .preset2:active{border-color:var(--s2);color:var(--s2)}
   .den-sel{width:auto;padding:8px 9px;background:var(--ink-2);border:1px solid var(--line);color:var(--parch);border-radius:7px;font-family:var(--sans);font-size:13px}
   .cd-rest{font-size:12px;color:var(--parch-dim);font-style:italic}
+  #lock{position:fixed;inset:0;z-index:100;background:radial-gradient(900px 500px at 50% -10%, #16292a 0%, rgba(22,41,42,0) 60%),var(--ink);display:none;align-items:center;justify-content:center;padding:24px}
+  #lock.show{display:flex}
+  .lock-card{width:100%;max-width:340px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:30px 24px;display:flex;flex-direction:column;gap:12px;text-align:center}
+  .lock-brand{font-family:var(--serif);font-weight:600;font-size:27px;color:var(--parch)}
+  .lock-brand em{font-style:italic;color:var(--life)}
+  .lock-sub{font-size:12.5px;color:var(--parch-dim);margin-bottom:6px;font-weight:300}
+  #lock input{background:var(--ink-2);border:1px solid var(--line);border-radius:9px;color:var(--parch);padding:12px 13px;font-family:var(--sans);font-size:15px}
+  #lock input:focus{border-color:var(--life);outline:none}
+  #lkBtn{cursor:pointer;background:var(--life);color:var(--ink);font-weight:800;border:none;border-radius:9px;padding:13px;font-size:15px;font-family:var(--sans)}
+  #lkBtn:disabled{opacity:.6}
+  #lkErr{font-size:12px;color:#F28B82;min-height:15px}
+  #syncState{font-family:var(--mono);font-size:9px;letter-spacing:.05em;vertical-align:middle}
 </style>
 </head>
 <body>
-<div class="topbar"><div class="brand">YKS <em>Pusulam</em></div><div class="tabs" id="tabs"></div></div>
+<div id="lock"><div class="lock-card"><div class="lock-brand">YKS <em>Pusulam</em></div><div class="lock-sub">Verilerin tüm cihazlarında güncel kalsın diye giriş yap</div><input id="lkUser" placeholder="Kullanıcı adı" autocomplete="username" autocapitalize="none"><input id="lkPass" type="password" placeholder="Şifre" autocomplete="current-password"><button id="lkBtn">Giriş yap</button><div id="lkErr"></div></div></div>
+<div class="topbar"><div class="brand">YKS <em>Pusulam</em> <span id="syncState"></span></div><div class="tabs" id="tabs"></div></div>
 <header class="sub-hero"><h1 id="subName">Matematik</h1><div class="tag" id="subTag"></div></header>
 <main class="wrap">
   <div class="today-strip" id="todayStrip"><span class="cal">📅</span><div><div class="t1" id="tsLbl">Sıradaki</div><div class="t2" id="tsTxt">—</div></div></div>
   <div class="dash" id="dash"></div>
-  <div class="tools"><button id="expandAll">Tümünü aç/kapat</button><button id="ioBtn">Yedekle / geri yükle</button><button id="resetBtn">Bu dersi sıfırla</button></div>
+  <div class="tools"><button id="expandAll">Tümünü aç/kapat</button><button id="ioBtn">Yedekle / geri yükle</button><button id="resetBtn">Bu dersi sıfırla</button><button id="logoutBtn">Çıkış</button></div>
   <div id="io"><textarea id="ioText" placeholder="Yedek kodunu yapıştır → Geri yükle. (Eski matematik panosunun kodu da yüklenir.)"></textarea>
     <div class="row"><button id="exportBtn">Tümünü yedekle (kopyala)</button><button id="importBtn">Geri yükle</button></div></div>
   <p class="note"><b>Genel</b> sekmesinde en üstte <b>toplam çözülen soru (her şey dahil)</b> görünür: konu soruları + çıkmış sorular + günlük paket. Her güne <b>10 paragraf·10 geometri·10 problem</b> paketi, TYT/AYT/Kısmi deneme (kısmiye hangi ders) ve <b>gün gün tam takvim</b> burada. Ders sekmelerinde her konuya <b>dokun</b> → öğrenildi, soru, çıkmış soru. Takvim <b>6 Tem 2026 – 18 Haz 2028</b>, tekrarlı. İlerlemen <b>otomatik kaydedilir</b>.</p>
@@ -462,7 +476,7 @@ function denArr(kind){if(kind==="tyt")return prog._tyt||(prog._tyt=[]);if(kind==
 function logArr(key){if(!prog._logs)prog._logs={};if(!prog._logs[key])prog._logs[key]=[];return prog._logs[key];}
 function sumLog(a){return (a||[]).reduce((x,e)=>x+(+e.q||0),0);}
 function stageOf(p){const n=((p&&p.s)?p.s.length:0)+((p&&p.c)?p.c.length:0);const l=!!(p&&(p.l||n>0));if(l&&n>=2)return 3;if(l&&n>=1)return 2;if(l)return 1;return 0;}
-function save(){const s=JSON.stringify(prog);try{localStorage.setItem(KEY,s);}catch(e){}try{if(window.storage)window.storage.set(KEY,s,false);}catch(e){}}
+function save(){const s=JSON.stringify(prog);try{localStorage.setItem(KEY,s);}catch(e){}try{if(window.storage)window.storage.set(KEY,s,false);}catch(e){}pushCloud();}
 async function load(){
   try{const v=localStorage.getItem(KEY);if(v){prog=JSON.parse(v);return;}}catch(e){}
   try{if(window.storage){const r=await window.storage.get(KEY,false);if(r&&r.value){prog=JSON.parse(r.value);return;}}}catch(e){}
@@ -680,7 +694,48 @@ document.getElementById("importBtn").addEventListener("click",()=>{try{prog=JSON
 document.getElementById("resetBtn").addEventListener("click",()=>{const t=tab();
   if(t.key==="_genel"){if(confirm("TÜM ilerleme (tüm dersler + denemeler) sıfırlansın mı?")){prog={};save();renderAll();}}
   else if(confirm(t.name+" dersindeki ilerleme sıfırlansın mı?")){prog[t.key]={};save();renderAll();}});
-(async()=>{await load();renderAll();})();
+/* ===== Bulut senkron (Supabase) ===== */
+const SB_URL="https://bgxqlaqalluvhemzhgau.supabase.co";
+const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJneHFsYXFhbGx1dmhlbXpoZ2F1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyNjk2NjksImV4cCI6MjA5ODg0NTY2OX0.XyiCVSMSg-R_4JFN-pip4xk864QGfWbsWT_o4JW_z8A";
+let sbc=null,cloudUid=null,cloudOn=false,lastPushed=null,pushTimer=null;
+function setSync(t,c){const el=document.getElementById("syncState");if(el){el.textContent=t;el.style.color=c;}}
+function pushCloud(){if(!cloudOn)return;clearTimeout(pushTimer);pushTimer=setTimeout(pushNow,1200);}
+async function pushNow(){if(!sbc||!cloudUid)return;const s=JSON.stringify(prog);if(s===lastPushed)return;lastPushed=s;
+  try{const{error}=await sbc.from("progress").upsert({user_id:cloudUid,data:prog,updated_at:new Date().toISOString()});if(error)throw error;setSync("● senkron","var(--life)");}
+  catch(e){lastPushed=null;setSync("○ çevrimdışı","var(--parch-dim)");}}
+function applyRemote(remote){if(!remote)return;const s=JSON.stringify(remote);if(s===JSON.stringify(prog))return;prog=remote;lastPushed=s;try{localStorage.setItem(KEY,s);}catch(e){}renderAll();}
+async function refetchCloud(){if(!sbc||!cloudUid)return;try{const{data}=await sbc.from("progress").select("data").eq("user_id",cloudUid).maybeSingle();if(data)applyRemote(data.data);}catch(e){}}
+async function afterLogin(){document.getElementById("lock").classList.remove("show");
+  const{data:{user}}=await sbc.auth.getUser();if(!user){setSync("○ çevrimdışı","var(--parch-dim)");return;}
+  cloudUid=user.id;
+  try{const{data,error}=await sbc.from("progress").select("data").eq("user_id",cloudUid).maybeSingle();if(error)throw error;
+    if(data&&data.data&&Object.keys(data.data).length)applyRemote(data.data);
+    cloudOn=true;await pushNow();setSync("● senkron","var(--life)");
+    sbc.channel("progress-sync").on("postgres_changes",{event:"*",schema:"public",table:"progress",filter:"user_id=eq."+cloudUid},p=>applyRemote(p.new&&p.new.data)).subscribe();
+  }catch(e){cloudOn=true;setSync("○ çevrimdışı","var(--parch-dim)");}}
+async function initCloud(){
+  if(!window.supabase){setSync("○ çevrimdışı","var(--parch-dim)");return;}
+  sbc=window.supabase.createClient(SB_URL,SB_KEY);
+  const{data:{session}}=await sbc.auth.getSession();
+  if(session)afterLogin();else document.getElementById("lock").classList.add("show");}
+async function doLogin(){
+  const u=document.getElementById("lkUser").value.trim().toLowerCase();
+  const p=document.getElementById("lkPass").value;
+  const err=document.getElementById("lkErr");const btn=document.getElementById("lkBtn");
+  if(!u||!p){err.textContent="Kullanıcı adı ve şifreyi gir.";return;}
+  err.textContent="";btn.disabled=true;btn.textContent="Giriş yapılıyor…";
+  const{error}=await sbc.auth.signInWithPassword({email:u+"@pusulam.app",password:p});
+  btn.disabled=false;btn.textContent="Giriş yap";
+  if(error){err.textContent="Kullanıcı adı veya şifre hatalı.";return;}
+  afterLogin();}
+document.getElementById("lkBtn").addEventListener("click",doLogin);
+document.getElementById("lkPass").addEventListener("keydown",e=>{if(e.key==="Enter")doLogin();});
+document.getElementById("lkUser").addEventListener("keydown",e=>{if(e.key==="Enter")doLogin();});
+document.getElementById("logoutBtn").addEventListener("click",async()=>{if(!confirm("Çıkış yapılsın mı? (Verilerin bulutta saklı kalır)"))return;try{if(sbc)await sbc.auth.signOut();}catch(e){}location.reload();});
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")refetchCloud();});
+window.addEventListener("online",()=>{refetchCloud();pushNow();});
+
+(async()=>{await load();renderAll();initCloud();})();
 if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("./sw.js");
 </script>
 </body>
