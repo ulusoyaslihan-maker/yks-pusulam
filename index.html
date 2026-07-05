@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>YKS Pusulam · Çalışma Panosu</title>
+<meta name="theme-color" content="#0A1213">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Crect width='180' height='180' rx='40' fill='%230A1213'/%3E%3Ctext x='50%25' y='58%25' font-size='96' text-anchor='middle' fill='%236EE7B7' font-family='Georgia'%3EY%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='64' height='64' rx='14' fill='%230A1213'/%3E%3Ctext x='50%25' y='60%25' font-size='38' text-anchor='middle' fill='%236EE7B7' font-family='Georgia'%3EY%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Mulish:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#0A1213;--ink-2:#0E1A1B;--panel:#12211F;--panel-2:#16292A;--glass:rgba(233,228,214,0.04);
+    --brass:#C9A24B;--brass-dim:#8f7433;--parch:#E8E4D6;--parch-dim:#A9B0AA;--line:rgba(201,162,75,0.22);
+    --life:#6EE7B7;--s0:#4a5a58;--s1:#6FC3E8;--s2:#F4C15D;--s3:#6EE7B7;
+    --serif:'Cormorant Garamond',Georgia,serif;--sans:'Mulish',system-ui,sans-serif;--mono:'Space Mono',monospace;}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{background:radial-gradient(1100px 640px at 50% -10%, #16292a 0%, rgba(22,41,42,0) 60%), var(--ink);
+    color:var(--parch);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;padding-bottom:env(safe-area-inset-bottom)}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.28;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");}
+  .wrap{position:relative;z-index:1;max-width:820px;margin:0 auto;padding:0 16px}
+  .topbar{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,var(--ink) 60%,rgba(10,18,19,.82));backdrop-filter:blur(8px);padding:calc(14px + env(safe-area-inset-top)) 0 8px;border-bottom:1px solid var(--line)}
+  .brand{text-align:center;font-family:var(--serif);font-weight:600;font-size:19px;color:var(--parch);margin-bottom:10px}
+  .brand em{font-style:italic;color:var(--life)}
+  .tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:0 16px}
+  .tab{cursor:pointer;font-size:14px;font-weight:700;color:var(--parch-dim);background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:9px 20px;display:flex;align-items:center;gap:8px;transition:.18s}
+  .tab.on{color:var(--ink)}
+  .tab .bd{width:9px;height:9px;border-radius:50%}
+  .tab .tp{font-family:var(--mono);font-size:10px}
+
+  header.sub-hero{padding:20px 16px 4px;text-align:center}
+  .sub-hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(28px,6vw,42px);color:var(--parch);line-height:1}
+  .sub-hero .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--brass);margin-top:8px}
+
+  .today-strip{max-width:700px;margin:16px auto 0;display:flex;gap:12px;align-items:center;padding:13px 16px;border:1px solid color-mix(in srgb,var(--life) 40%,transparent);border-radius:12px;background:color-mix(in srgb,var(--life) 8%,transparent)}
+  .today-strip .cal{font-size:20px}
+  .today-strip .t1{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--life)}
+  .today-strip .t2{font-size:15px;color:var(--parch);font-weight:600;margin-top:2px}
+  .today-strip .t2 small{display:block;font-weight:300;color:var(--parch-dim);font-size:12.5px;margin-top:2px}
+
+  .dash{margin:16px auto 8px;display:flex;gap:20px;align-items:center;justify-content:center;flex-wrap:wrap;padding:20px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,var(--panel-2),var(--ink-2))}
+  .ring{position:relative;width:112px;height:112px;flex:none}.ring svg{transform:rotate(-90deg)}
+  .ring .val{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .ring .val b{font-family:var(--serif);font-size:27px;color:var(--life);line-height:1}
+  .ring .val span{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--parch-dim);margin-top:3px}
+  .dstats{display:flex;flex-direction:column;gap:8px;min-width:210px}
+  .dstat{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--parch-dim)}
+  .dstat i{width:11px;height:11px;border-radius:3px;flex:none}.dstat b{color:var(--parch)}
+  .dstat span{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--parch)}
+  .dstat.sub2{padding-left:22px;font-size:12.5px}.dstat i.hollow{border:1.5px solid var(--s1);background:transparent;opacity:.7}
+  .qbig{width:100%;text-align:center;margin-top:4px;padding-top:9px;border-top:1px solid var(--line);font-family:var(--mono);font-size:12px;color:var(--parch-dim)}
+  .qbig b{color:var(--s2);font-size:15px}
+
+  .tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px 0 4px}
+  .tools button{font-family:var(--mono);font-size:11px;cursor:pointer;background:transparent;border:1px solid var(--brass-dim);color:var(--brass);border-radius:20px;padding:8px 14px}
+  #io{max-width:640px;margin:10px auto 0;display:none}
+  #io textarea{width:100%;height:76px;background:var(--ink-2);border:1px solid var(--line);border-radius:10px;color:var(--parch);font-family:var(--mono);font-size:11px;padding:10px}
+  #io .row{display:flex;gap:8px;margin-top:8px;justify-content:center}
+  .note{max-width:660px;margin:12px auto 0;font-size:12.5px;color:var(--parch-dim);text-align:center;font-weight:300}.note b{color:var(--life)}
+  .legend{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:16px auto 6px;font-family:var(--mono);font-size:10.5px}
+  .legend span{display:inline-flex;align-items:center;gap:6px;color:var(--parch-dim)}.legend i{width:10px;height:10px;border-radius:3px}
+
+  .phase{margin:0 auto 12px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel)}
+  .phase.now{border-color:color-mix(in srgb,var(--life) 55%,transparent)}
+  .ph-head{display:flex;align-items:center;gap:11px;padding:15px 16px;cursor:pointer;user-select:none;background:linear-gradient(180deg,var(--panel-2),var(--panel))}
+  .ph-no{font-family:var(--mono);font-size:12px;color:var(--brass);min-width:42px}
+  .ph-tit{font-family:var(--serif);font-size:19px;font-weight:600;color:var(--parch);flex:1;line-height:1.15}
+  .ph-tit small{display:block;font-family:var(--mono);font-size:10px;color:var(--parch-dim);font-weight:400;margin-top:2px}
+  .now-badge{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);background:var(--life);border-radius:12px;padding:3px 8px;font-weight:700}
+  .ph-prog{font-family:var(--mono);font-size:12px;color:var(--parch-dim);min-width:44px;text-align:right}
+  .ph-chev{color:var(--brass);transition:transform .3s;font-size:12px}
+  .phase.open .ph-body{max-height:40000px}.ph-body{max-height:0;overflow:hidden;transition:max-height .5s ease}
+  .ph-inner{padding:4px 14px 14px}
+  .heading{margin-top:14px}
+  .hd-title{font-size:13px;font-weight:700;color:var(--parch);margin-bottom:7px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .hd-dates{display:flex;gap:5px;flex-wrap:wrap}
+  .dchip{font-family:var(--mono);font-size:9.5px;color:var(--parch-dim);border:1px solid var(--line);border-radius:20px;padding:2px 7px;font-weight:400}
+  .dchip.t{color:var(--ink);background:var(--life);border-color:var(--life);font-weight:700}
+  .dchip.rep{color:var(--s3);border-color:color-mix(in srgb,var(--s3) 40%,transparent)}
+  .subs{display:flex;flex-direction:column;gap:6px}
+  .sub-wrap{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--ink-2)}
+  .sub-wrap.today{border-color:var(--life);box-shadow:0 0 0 1px color-mix(in srgb,var(--life) 30%,transparent)}
+  .sub{display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer}
+  .sub .dot{width:13px;height:13px;border-radius:4px;flex:none;background:var(--s0)}
+  .sub-wrap[data-s="1"] .dot{background:var(--s1)}.sub-wrap[data-s="2"] .dot{background:var(--s2)}.sub-wrap[data-s="3"] .dot{background:var(--s3)}
+  .sub .txt{flex:1;font-size:14px;line-height:1.3;color:var(--parch)}
+  .sub-wrap[data-s="1"]{background:color-mix(in srgb,var(--s1) 20%,var(--ink-2));border-color:color-mix(in srgb,var(--s1) 45%,var(--line));box-shadow:inset 4px 0 0 var(--s1)}
+  .sub-wrap[data-s="2"]{background:color-mix(in srgb,var(--s2) 20%,var(--ink-2));border-color:color-mix(in srgb,var(--s2) 45%,var(--line));box-shadow:inset 4px 0 0 var(--s2)}
+  .sub-wrap[data-s="3"]{background:color-mix(in srgb,var(--s3) 30%,var(--ink-2));border-color:color-mix(in srgb,var(--s3) 60%,var(--line));box-shadow:inset 4px 0 0 var(--s3)}
+  .sub-wrap[data-s="3"] .txt{color:#e6fff5;font-weight:600}
+  .sub-wrap[data-s="1"] .txt,.sub-wrap[data-s="2"] .txt{color:#f2efe4}
+  .sub .sdate{font-family:var(--mono);font-size:9.5px;color:var(--parch-dim);white-space:nowrap;border:1px solid var(--line);border-radius:20px;padding:2px 7px}
+  .sub-wrap.today .sdate{color:var(--ink);background:var(--life);border-color:var(--life);font-weight:700}
+  .sub-wrap.past .sdate{opacity:.5}
+  .sub .qtot{font-family:var(--mono);font-size:10px;color:var(--s2);white-space:nowrap}
+  .sub .st{font-family:var(--mono);font-size:9.5px;color:var(--parch-dim);white-space:nowrap}
+  .sub-wrap[data-s="1"] .st{color:var(--s1)}.sub-wrap[data-s="2"] .st{color:var(--s2)}.sub-wrap[data-s="3"] .st{color:var(--s3)}
+  .sub .chev{color:var(--brass-dim);font-size:11px;transition:transform .3s}.sub-wrap.open .chev{transform:rotate(180deg)}
+  .detail{max-height:0;overflow:hidden;transition:max-height .4s ease}.sub-wrap.open .detail{max-height:1400px;border-top:1px solid var(--line)}
+  .detail-in{padding:13px 13px 15px;background:var(--panel)}
+  .learn-btn{display:inline-flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;background:transparent;border:1px dashed color-mix(in srgb,var(--s1) 55%,transparent);color:var(--s1);border-radius:8px;padding:9px 13px}
+  .learn-btn.on{background:color-mix(in srgb,var(--s1) 16%,transparent);border-style:solid;color:#dff2fb;font-weight:600}
+  .learn-btn .bx{width:15px;height:15px;border-radius:4px;border:1.5px solid currentColor;display:inline-flex;align-items:center;justify-content:center;font-size:11px}
+  .sess-head{display:flex;justify-content:space-between;align-items:baseline;margin:15px 0 8px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--brass)}
+  .sess-tot{color:var(--s2)}
+  .sess-list{display:flex;flex-direction:column;gap:5px}.sess-empty{font-size:12.5px;color:var(--parch-dim);font-style:italic}
+  .sess{display:flex;align-items:center;gap:10px;padding:8px 11px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:var(--ink-2)}
+  .sess .lab{font-weight:600;color:var(--parch);min-width:74px}.sess .lab.rep{color:var(--s3)}
+  .sess .q{font-family:var(--mono);font-size:12px;color:var(--s2)}.sess .dt{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--parch-dim)}
+  .sess .del{cursor:pointer;color:var(--parch-dim);border:none;background:transparent;font-size:16px;padding:0 3px}
+  .add-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:11px;padding-top:11px;border-top:1px dashed var(--line)}
+  .add-row .lbl{font-size:12px;color:var(--parch-dim)}
+  .preset{font-family:var(--mono);font-size:13px;cursor:pointer;background:var(--ink-2);border:1px solid var(--line);color:var(--parch);border-radius:7px;padding:8px 12px}
+  .qin{width:62px;background:var(--ink-2);border:1px solid var(--line);color:var(--parch);border-radius:7px;padding:8px 9px;font-family:var(--mono);font-size:13px}
+  .add-sess{font-family:var(--mono);font-size:13px;cursor:pointer;background:color-mix(in srgb,var(--life) 14%,transparent);border:1px solid color-mix(in srgb,var(--life) 45%,transparent);color:var(--life);border-radius:7px;padding:8px 13px}
+  footer{text-align:center;padding:40px 16px 60px;color:var(--parch-dim);font-weight:300}
+  footer .seal{font-family:var(--serif);font-style:italic;font-size:19px;color:var(--parch);margin-bottom:8px}
+  footer .sm{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--brass-dim);margin-top:14px}
+  :focus-visible{outline:2px solid var(--life);outline-offset:2px;border-radius:6px}
+  .sub-main{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+  .dchips{display:flex;gap:4px;flex-wrap:wrap}
+  .den-card{margin:0 auto 12px;border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:14px 16px}
+  .den-head{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--serif);font-size:18px;font-weight:600;color:var(--parch);margin-bottom:10px}
+  .den-tot{font-family:var(--mono);font-size:11px;color:var(--s2);font-weight:400}
+  .den-in{width:82px}
+  .gcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;width:100%}
+  .gcard{border:1px solid var(--line);border-radius:12px;background:linear-gradient(180deg,var(--panel-2),var(--ink-2));padding:16px;text-align:center}
+  .gcard.grand{grid-column:1/-1;border-color:color-mix(in srgb,var(--life) 45%,transparent);background:linear-gradient(180deg,color-mix(in srgb,var(--life) 12%,transparent),var(--ink-2))}
+  .gcard.grand .gv{font-size:40px}
+  .gcard.grand .gl{letter-spacing:.1em;color:var(--life)}
+  .gcard .gv{font-family:var(--serif);font-size:29px;font-weight:600;color:var(--life);line-height:1}
+  .gcard .gl{font-size:12px;color:var(--parch-dim);margin-top:6px}
+  .sechead{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);margin:22px auto 10px;text-align:center}
+  .mini-sum{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:6px}
+  .ov{cursor:pointer;border:1px solid var(--line);border-radius:11px;padding:11px 13px;background:var(--panel)}
+  .ov .n{font-size:13px;font-weight:700;color:var(--parch);display:flex;align-items:center;gap:7px}
+  .ov .n .bd{width:8px;height:8px;border-radius:50%}
+  .ov .bar{height:6px;border-radius:4px;background:var(--ink-2);margin-top:8px;overflow:hidden}
+  .ov .bar i{display:block;height:100%;border-radius:4px}
+  .ov .m{font-family:var(--mono);font-size:10px;color:var(--parch-dim);margin-top:6px}
+  .calmonth{margin:0 auto 8px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel)}
+  .cm-head{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;cursor:pointer;user-select:none;font-family:var(--serif);font-size:17px;font-weight:600;color:var(--parch);background:linear-gradient(180deg,var(--panel-2),var(--panel))}
+  .calmonth.open .cm-head .ph-chev{transform:rotate(180deg)}
+  .cm-body{max-height:0;overflow:hidden;transition:max-height .5s ease}
+  .calmonth.open .cm-body{max-height:6000px}
+  .calday{display:flex;gap:12px;padding:9px 14px;border-top:1px solid rgba(201,162,75,.1)}
+  .calday.today{background:color-mix(in srgb,var(--life) 12%,transparent)}
+  .calday.today .cd-date{color:var(--life);font-weight:700}
+  .cd-date{font-family:var(--mono);font-size:11px;color:var(--parch-dim);min-width:60px;padding-top:2px}
+  .cd-items{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}
+  .cd-item{font-size:13px;color:var(--parch);display:flex;align-items:center;gap:7px;line-height:1.3}
+  .cd-item .cdot{width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
+  .cd-item b{color:var(--c);font-family:var(--mono);font-size:10px}
+  .cd-item.st0{opacity:.55}
+  .cd-item.st1{background:color-mix(in srgb,var(--s1) 30%,transparent);border:1px solid color-mix(in srgb,var(--s1) 55%,transparent);border-radius:6px;padding:2px 8px;color:#eef7fb}
+  .cd-item.st2{background:color-mix(in srgb,var(--s2) 32%,transparent);border:1px solid color-mix(in srgb,var(--s2) 55%,transparent);border-radius:6px;padding:2px 8px;color:#fdf6e6}
+  .cd-item.st3{background:color-mix(in srgb,var(--s3) 38%,transparent);border:1px solid color-mix(in srgb,var(--s3) 65%,transparent);border-radius:6px;padding:2px 8px;color:#eafff6;font-weight:600}
+  .callegend{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:0 auto 12px;font-family:var(--mono);font-size:10px;color:var(--parch-dim)}
+  .callegend span{display:inline-flex;align-items:center;gap:5px}
+  .callegend i{width:11px;height:11px;border-radius:3px}
+  .dchip.more{color:var(--brass);border-color:var(--brass-dim);background:rgba(201,162,75,.08)}
+  .cd-pkg{font-size:11px;color:var(--brass-dim);font-style:italic}
+  .preset2{font-family:var(--mono);font-size:13px;cursor:pointer;background:var(--ink-2);border:1px solid var(--line);color:var(--parch);border-radius:7px;padding:8px 12px}
+  .preset2:active{border-color:var(--s2);color:var(--s2)}
+  .den-sel{width:auto;padding:8px 9px;background:var(--ink-2);border:1px solid var(--line);color:var(--parch);border-radius:7px;font-family:var(--sans);font-size:13px}
+  .cd-rest{font-size:12px;color:var(--parch-dim);font-style:italic}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="brand">YKS <em>Pusulam</em></div><div class="tabs" id="tabs"></div></div>
+<header class="sub-hero"><h1 id="subName">Matematik</h1><div class="tag" id="subTag"></div></header>
+<main class="wrap">
+  <div class="today-strip" id="todayStrip"><span class="cal">📅</span><div><div class="t1" id="tsLbl">Sıradaki</div><div class="t2" id="tsTxt">—</div></div></div>
+  <div class="dash" id="dash"></div>
+  <div class="tools"><button id="expandAll">Tümünü aç/kapat</button><button id="ioBtn">Yedekle / geri yükle</button><button id="resetBtn">Bu dersi sıfırla</button></div>
+  <div id="io"><textarea id="ioText" placeholder="Yedek kodunu yapıştır → Geri yükle. (Eski matematik panosunun kodu da yüklenir.)"></textarea>
+    <div class="row"><button id="exportBtn">Tümünü yedekle (kopyala)</button><button id="importBtn">Geri yükle</button></div></div>
+  <p class="note"><b>Genel</b> sekmesinde en üstte <b>toplam çözülen soru (her şey dahil)</b> görünür: konu soruları + çıkmış sorular + günlük paket. Her güne <b>10 paragraf·10 geometri·10 problem</b> paketi, TYT/AYT/Kısmi deneme (kısmiye hangi ders) ve <b>gün gün tam takvim</b> burada. Ders sekmelerinde her konuya <b>dokun</b> → öğrenildi, soru, çıkmış soru. Takvim <b>6 Tem 2026 – 18 Haz 2028</b>, tekrarlı. İlerlemen <b>otomatik kaydedilir</b>.</p>
+  <div class="legend"><span><i style="background:var(--s0)"></i>Başlanmadı</span><span><i style="background:var(--s1)"></i>Öğrenildi</span><span><i style="background:var(--s2)"></i>Soru çözüldü</span><span><i style="background:var(--s3)"></i>Pekişti</span></div>
+  <div id="phases"></div>
+</main>
+<footer><div class="seal">"Dokuz ders, tek pusula; her gün bir adım."</div><div class="sm">YKS PUSULAM · 9 DERS · 6 TEM 2026 – 18 HAZ 2028</div></footer>
+
+<script>
+/* ===== VERİ ===== */
+const MAT=[
+ ["FAZ 1 · Cebir Temeli",[["1 · Sayı Kümeleri",["Sayı Kümeleri","Temel İşlemler","Tek-Çift Sayılar","Pozitif-Negatif","Ardışık Sayılar","Sayı Basamakları","Asal-Aralarında Asal","Ondalık-Devirli","Rasyonel İşlemler"]],["2 · Bölünebilme",["Kalanlı Bölme","Bölünebilme 1","Bölünebilme 2","Asal Çarpanlar","EBOB-EKOK","EBOB-EKOK Problemleri","Periyodik Problemler"]],["3 · Denklem-Mutlak Değer",["Aralık","1. Derece Denklemler","Basit Eşitsizlikler","İki Bilinmeyenli Denklem","İki Bilinmeyenli Eşitsizlik","Eşitsizlik Sistemleri","Mutlak Değer","Mutlak Değerli Denklem"]],["4 · Üslü-Köklü",["Üslü İfadeler","Üslü Denklem","Köklü İfadeler","Köklü Denklem"]],["5 · Problemler",["Oran-Orantı","Oran-Orantı Problemleri","Sayı Problemleri","Kesir Problemleri","Yaş Problemleri","İşçi Problemleri","Yüzde Problemleri","Kâr-Zarar","Karışım","Hareket","Rutin Olmayan"]]]],
+ ["FAZ 2 · Mantık & Sayma",[["6 · Önermeler",["Önermeler","Bileşik Önermeler","Koşullu","İki Yönlü Koşullu","Niceleyiciler","Tanım-Teorem-İspat"]],["7 · Kümeler-Temel",["Temel Kavramlar","Alt Küme"]],["8 · Kümelerde İşlem",["Kesişim-Birleşim","Fark-Tümleme","Küme Problemleri","Kartezyen Çarpım"]],["9 · Sıralama-Seçme",["Sayma İlkesi","Faktöriyel","Permütasyon","Tekrarlı Permütasyon","Kombinasyon","Kombinasyon Problemleri","Kombinasyon-Geometri","Pascal-Binom"]],["10 · Olasılık",["Temel Kavramlar","Uygulamalar"]]]],
+ ["FAZ 3 · Fonksiyon & Polinom",[["11 · Fonksiyon",["Kavram-Gösterim","Fonksiyon Soruları","İçine-Örten-Birebir","Birim-Sabit","Doğrusal-Parçalı","Tek-Çift","Dört İşlem","Grafikler"]],["12 · Bileşke-Ters",["Bileşke","Ters","Grafik Uygulamaları"]],["13 · Polinom",["Polinom Kavramı","Toplama-Çarpma","Bölme","Kalan Bulma"]],["14 · Çarpanlara Ayırma",["Ortak Çarpan","Tam Kare/İki Kare","Tam Küp","Üç Terimli","Rasyonel Sadeleştirme"]],["15 · İkinci Derece",["2. Derece Denklem","Çözüm Kümesi","Diskriminant","Kök-Katsayı","Karmaşık Sayılar"]]]],
+ ["FAZ 4 · İstatistik",[["16 · Eğilim-Yayılım",["Merkezi Eğilim","Merkezi Yayılım"]],["17 · Grafikler",["Histogram","Çizgi-Sütun-Daire"]]]],
+ ["FAZ 5 · TYT Geometri",[["18 · Üçgende Temel",["Açı Çeşitleri","Paralel-Kesen","Üçgende Açılar","İkizkenar-Eşkenar","Açı-Kenar","Üçgen Eşitsizliği"]],["19 · Eşlik-Benzerlik",["Eşlik","Benzerlik","Temel Orantı","Uygulamalar"]],["20 · Yardımcı Elemanlar",["Açıortay","Açıortay Teoremleri","Kenarortay","Yükseklik","Kenar Orta Dikme"]],["21 · Dik Üçgen-Trig",["Pisagor","Öklid","Trig. Oranlar","30-45-60","Birim Çember"]],["22 · Üçgenin Alanı",["Alan","Alan Uygulamaları"]],["23 · Çokgenler",["Çokgenler"]],["24 · Dörtgenler",["Dörtgenler"]],["25 · Özel Dörtgenler",["Yamuk","İkizkenar-Dik Yamuk","Yamuğun Alanı","Paralelkenar","Eşkenar Dörtgen","Paralelkenar Alanı","Dikdörtgen","Kare","Dikdörtgen Alanı","Deltoid"]],["26 · Katı Cisimler",["Dik Prizmalar","Küp","Dik Piramitler","Düzgün Dört Yüzlü"]]]],
+ ["FAZ 6 · AYT Fonksiyon & Parabol",[["27 · Fonksiyon Uygulamaları",["Grafik Uygulamaları","Eksen Kesişim/İşaret","Artan-Azalan-Maks-Min","Ortalama Değişim Hızı"]],["28 · Parabol",["Grafik Çizimi","Tepe-Simetri-Görüntü","Grafik","Elemanlarıyla Denklem","Parabol-Doğru","Modelleme"]],["29 · Dönüşümler",["Tek-Çift Simetri"]],["30 · 2. Derece Sistemler",["İki Bilinmeyenli Sistem"]],["31 · 2. Derece Eşitsizlik",["Çözüm Kümesi","Çarpım-Bölüm"]],["32 · Eşitsizlik Sistemleri",["Sistemler"]]]],
+ ["FAZ 7 · AYT Olasılık",[["33 · Koşullu Olasılık",["Koşullu","Bağımlı-Bağımsız","Bileşik Olaylar"]],["34 · Deneysel-Teorik",["Deneysel-Teorik"]]]],
+ ["FAZ 8 · AYT Trigonometri",[["35 · Yönlü Açılar",["Yönlü Açılar-Esas Ölçü"]],["36 · Trig. Fonksiyonlar",["Birim Çember","Sinüs-Kosinüs","Tanjant-Kotanjant","Sekant-Kosekant","Sıralama","Dar Açı Cinsinden","Kosinüs Teoremi","Sinüs Teoremi","Periyot","Grafikler","Ters Trig."]],["37 · Toplam-Fark & İki Kat",["Sinüs-Kosinüs Top-Fark","Tanjant Top-Fark","Sinüs-Kosinüs İki Kat","Tanjant İki Kat"]],["38 · Trig. Denklemler",["sinx=a...","Lineer-Homojen"]]]],
+ ["FAZ 9 · AYT Üstel-Log & Diziler",[["39 · Üstel",["Üstel Fonksiyon"]],["40 · Logaritma",["Log ve Grafiği","10 ve e Tabanı","Log Özellikleri"]],["41 · Üstel-Log Denklem",["Denklemler","Eşitsizlikler","Gerçek Hayat"]],["42 · Diziler",["Dizi Kavramı","Dizi Çeşitleri","Aritmetik Dizi","Geometrik Dizi","Sonlu Toplamlar","Gerçek Hayat"]]]],
+ ["FAZ 10 · AYT Analiz",[["43 · Limit",["Limit Kavramı","Limit Özellikleri","Belirsizlikler","Süreklilik"]],["44 · Türev",["Türev Kavramı","Türev Kuralları","Çarpım-Bölüm Türevi","Bileşke Türevi"]],["45 · Türev Uygulamaları",["Artan-Azalan","Ekstremum","Grafik Çizimi","Maks-Min"]],["46 · Belirsiz İntegral",["Kurallar","Değişken Değiştirme"]],["47 · Belirli İntegral",["Riemann","Belirli İntegral","Özellikler","Alan Hesabı","İki Grafik Arası"]]]],
+ ["FAZ 11 · AYT Analitik Geometri",[["48 · Doğru",["Analitik Düzlem","İki Nokta Uzaklık","Orta Nokta-Ağırlık Merkezi","Eğim","Doğru Denklemleri","Doğruların Durumu","Nokta-Doğru Uzaklık","Oranla Bölme"]],["49 · Çember",["Standart Denklem","Özel Denklemler","Genel Denklem","Doğru-Çember"]],["50 · Dönüşümler",["Öteleme","Dönme","Simetri","Bileşke"]],["51 · Çember Elemanları",["Teğet-Kiriş-Çap","Kiriş Özellikleri"]],["52 · Çemberde Açılar",["Merkez-Çevre Açı","Teğet-Kiriş & İç-Dış"]],["53 · Çemberde Teğet",["Çevrel Çember-Teğet"]],["54 · Daire",["Çevre","Alan"]],["55 · Katı Cisimler",["Silindir Alan","Silindir Hacim","Koni Alan","Koni Hacim","Küre"]]]],
+ ["FAZ 12 · Deneme & Final",[["Son dönem",["TYT denemeleri","AYT denemeleri","Hata defteri","Zayıf konu tekrarı","Süre yönetimi"]]]],
+];
+const BIY=[
+ ["FAZ A · Temel Biyoloji (9-10)",[
+   ["1 · Canlıların Ortak Özellikleri",["Canlıların ortak özellikleri"]],
+   ["2 · İnorganik Bileşikler",["İnorganik bileşiklerin özellikleri ve önemi"]],
+   ["3 · Organik Bileşikler",["Genel özellikler-Karbonhidratlar","Lipitler","Proteinler","Enzimler","Vitaminler ve Hormonlar","Nükleik Asitler","ATP","Sağlıklı Beslenme"]],
+   ["4 · Hücresel Yapılar",["Hücre Teorisi, Prokaryot-Ökaryot","Zar, Duvar, Sitoplazma, Çekirdek","Ribozom, ER, Golgi, Lizozom, Koful","Peroksizom, Sentrozom, İskelet","Mitokondri ve Plastitler"]],
+   ["5 · Zardan Madde Geçişi",["Basit-Kolaylaştırılmış Difüzyon","Osmoz","Aktif Taşıma","Endositoz-Ekzositoz","Bilimsel Yöntem"]],
+   ["6 · Sınıflandırma",["Amaç ve kategoriler"]],
+   ["7 · Canlı Âlemleri",["Bakteriler-Arkeler","Protista","Bitkiler","Mantarlar","Omurgasızlar","Omurgalılar","Virüsler"]],
+   ["8 · Hücre Döngüsü-Mitoz",["Döngü ve İnterfaz","Mitoz evreleri","Döngü kontrolü"]],
+   ["9 · Eşeysiz Üreme",["Eşeysiz üreme çeşitleri"]],
+   ["10 · Mayoz",["Mayozun evreleri"]],
+   ["11 · Eşeyli Üreme",["Eşeyli üreme"]],
+   ["12 · Kalıtım",["Kavramlar-Olasılık-Gamet","Mendel-Çaprazlamalar","Eş Baskınlık-Çok Alel-Kan","Eşeye Bağlı-Akraba","Soyağacı"]],
+   ["13 · Genetik Varyasyonlar",["Varyasyon ve çeşitlilik"]],
+   ["14 · Ekosistem Ekolojisi",["Kavramlar ve bileşenler","Beslenme şekilleri","Madde-enerji akışı","Madde döngüleri"]],
+   ["15 · Güncel Çevre Sorunları",["Hava-asit-iklim","Su-toprak-radyoaktif-ses","Erozyon-tahrip","Bireyin rolü-çözüm"]],
+   ["16 · Doğal Kaynaklar",["Sürdürülebilirliğin önemi"]],
+   ["17 · Biyolojik Çeşitlilik",["Önemi ve korunması"]],
+ ]],
+ ["FAZ B · Denetim, Duyu, Destek",[
+   ["18 · Sinir Sistemi",["Sinir doku","İmpuls oluşumu-iletimi","MSS-Ön beyin","MSS-Orta/Arka beyin, Omurilik","Çevresel SS-rahatsızlıklar"]],
+   ["19 · Endokrin Sistem",["Bezler, Epifiz, Hipofiz","Tiroit, Paratiroit, Timüs","Böbrek üstü, Pankreas, Eşeysel"]],
+   ["20 · Duyu Organları",["Reseptörler, Deri, Burun, Dil","Kulak","Göz"]],
+   ["21 · İskelet Sistemi",["Kemik doku ve çeşitleri","Kıkırdak ve eklemler"]],
+   ["22 · Kas Sistemi",["Kas doku","Kasılma ve enerji","Kas-iskelet, rahatsızlıklar"]],
+ ]],
+ ["FAZ C · İç Sistemler",[
+   ["23 · Sindirim Sistemi",["Ağız-Yutak-Yemek borusu","Mide-Bağırsaklar","Yardımcı organlar","Emilim ve rahatsızlıklar"]],
+   ["24 · Kan Dolaşımı",["Kalbin yapısı","Kanın hareketi-dolaşım","Damarlar-doku sıvısı","Kan doku"]],
+   ["25 · Lenf Dolaşımı",["Lenf ve rahatsızlıklar"]],
+   ["26 · Bağışıklık",["Doğal bağışıklık","Kazanılmış bağışıklık"]],
+   ["27 · Solunum Sistemi",["Yapı-soluk alışverişi","Gaz taşınması-hastalıklar"]],
+   ["28 · Üriner Sistem",["Yapı-organlar","Nefron-idrar oluşumu","Homeostazi-rahatsızlıklar"]],
+   ["29 · Üreme Sistemi",["Erkek üreme","Dişi üreme","Menstrual döngü","Döllenme-sağlık"]],
+   ["30 · Embriyonik Gelişim",["Embriyonik gelişim süreci"]],
+ ]],
+ ["FAZ D · Ekoloji, Genetik & Enerji",[
+   ["31 · Komünite Ekolojisi",["Rekabet-av-avcı","Simbiyoz-süksesyon"]],
+   ["32 · Popülasyon Ekolojisi",["Popülasyon büyüklüğü ve değişimi"]],
+   ["33 · Nükleik Asitler",["Keşif-nükleotitler","Çeşitler-organizasyon","DNA'nın eşlenmesi"]],
+   ["34 · Genetik Şifre-Protein Sentezi",["Genetik şifre-bilgi akışı","Protein sentezi mekanizması"]],
+   ["35 · Genetik Mühendisliği",["Kavramlar-uygulamalar","İnsan hayatına etkileri"]],
+   ["36 · Canlılık ve Enerji",["ATP ve fosforilasyon"]],
+   ["37 · Fotosentez",["Önemi ve ögeleri","Reaksiyonları","Hız faktörleri"]],
+   ["38 · Kemosentez",["Kemosentez"]],
+   ["39 · Hücresel Solunum",["Oksijenli solunum-mitokondri","Evreleri","Oksijensiz solunum-ilişki"]],
+   ["40 · Fermantasyon",["Fermantasyon"]],
+ ]],
+ ["FAZ E · Bitki Biyolojisi & Çevre",[
+   ["41 · Bitkisel Dokular",["Meristem","Temel","İletim","Örtü"]],
+   ["42 · Bitkisel Organlar",["Kök","Gövde","Yaprak"]],
+   ["43 · Bitki Hormonları",["Hormonların etkisi"]],
+   ["44 · Bitkilerde Hareket",["Hareket-fotoperiyodizm"]],
+   ["45 · Bitkilerde Madde Taşınması",["Kökte emilim","Ksilemde taşınma","Stomaların rolü","Floemde taşınma"]],
+   ["46 · Bitkilerde Eşeyli Üreme",["Çiçeğin kısımları","Tozlaşma-döllenme-tohum","Çimlenme-dormansi"]],
+   ["47 · Canlılar ve Çevre",["Canlılar ve çevre"]],
+ ]],
+];
+
+const FIZ=[
+ ["FAZ A · TYT Fizik",[
+   ["1 · Fizik Bilimine Giriş",["Fizik bilimine giriş"]],
+   ["2 · Madde ve Özellikleri",["Kütle ve Hacim","Özkütle","Dayanıklılık","Adezyon-Kohezyon-Yüzey Gerilimi-Kılcallık"]],
+   ["3 · Hareket ve Kuvvet",["Hareket Kavramları","İvme","Kuvvet","Newton Yasaları","Sürtünme Kuvveti"]],
+   ["4 · Enerji",["İş-Enerji-Güç","Enerji Çeşitleri-Mekanik Enerji","Enerji Korunumu","Verim-Enerji Kaynakları"]],
+   ["5 · Isı ve Sıcaklık",["Isı-Sıcaklık-Termometreler","Isı Alışverişi","Hal Değişimi","Isıl Denge","Enerji İletim Yolları","Genleşme"]],
+   ["6 · Elektrostatik",["Yükler-Yüklenme Çeşitleri","İletken-Yalıtkan Yük Dağılımı","Elektriksel Kuvvet-Alan"]],
+   ["7 · Elektrik ve Manyetizma",["Akım-Direnç","Ohm-Dirençlerin Bağlanması","Üreteçler","Elektrik Enerjisi-Güç-Lamba","Mıknatıs-Manyetik Alan","Akım-Manyetik Alan"]],
+   ["8 · Basınç ve Kaldırma",["Katılarda Basınç","Sıvı Basıncı-Pascal","Gaz-Atmosfer Basıncı","Akışkan-Bernoulli","Kaldırma Kuvveti"]],
+   ["9 · Dalgalar",["Temel Kavramlar","Yay Dalga Hız-Yansıma","Yay Dalga Geçiş-Girişim","Su Dalga Özellik-Yansıma","Su Dalga Hız-Kırılma","Ses Dalgaları","Deprem Dalgaları"]],
+   ["10 · Optik",["Işık-Aydınlanma Şiddeti","Gölge","Yansıma-Düzlem Ayna","Küresel Ayna Özellik-Işın","Küresel Ayna Görüntü","Işığın Kırılması","Tam Yansıma-Sınır Açısı","Mercek Özellik-Işın","Mercek Görüntü","Prizma","Renk"]],
+ ]],
+ ["FAZ B · AYT Mekanik",[
+   ["11 · Kuvvet ve Hareket",["Vektörler","Bağıl Hareket","Newton (Net Kuvvet Hesabı)","Newton (Net Kuvvet Etkisi)","Bir Boyutta Sabit İvme","Serbest Düşme-Hava Direnci","Yukarı/Aşağı Atış","Yatay Atış","Eğik Atış","İş-Enerji Türleri","Enerji Korunumu","İtme-Çizgisel Momentum","Momentum Korunumu (Esnek)","Momentum Korunumu (Esnek Olmayan)","Tork","Denge Şartları","Kütle-Ağırlık Merkezi","Basit Makineler 1","Basit Makineler 2"]],
+ ]],
+ ["FAZ C · AYT Elektrik & Dönme",[
+   ["12 · Elektrik ve Manyetizma",["Elektriksel Kuvvet","Elektrik Alan","Potansiyel Enerji-Potansiyel","Potansiyel Farkı-İş","Düzgün Elektrik Alan","Sığa-Sığaçlar","Manyetik Alan","Düz Tele Manyetik Kuvvet","Yüklü Parçacık Manyetik Alan","Manyetik Akı-İndüksiyon","Öz İndüksiyon-Lorentz-EMK","Alternatif Akım","Transformatörler"]],
+   ["13 · Çembersel Hareket",["Düzgün Çembersel Hareket","Merkezcil Kuvvet","Virajlar","Öteleme-Dönme","Eylemsizlik Momenti-Dönme KE","Açısal Momentum","Kütle Çekim","Kepler Kanunları"]],
+   ["14 · Basit Harmonik Hareket",["BHH Kavramları","Basit Sarkaç-Yay Sarkacı"]],
+ ]],
+ ["FAZ D · AYT Dalga & Modern",[
+   ["15 · Dalga Mekaniği",["Su Dalga Kırınım-Girişim","Çift Yarıkta Girişim","Tek Yarıkta Kırınım","Işığın Dalga Doğası-Doppler","Elektromanyetik Dalgalar"]],
+   ["16 · Atom Fiziği-Radyoaktivite",["Atom Modelleri-Bohr","Büyük Patlama-Atomaltı","Radyoaktivite"]],
+   ["17 · Modern Fizik",["Özel Görelilik","Siyah Cisim-Planck","Fotoelektrik Olay","Fotoelektrik Uygulama-Kesme Gerilimi","Compton-De Broglie"]],
+   ["18 · Modern Fiziğin Uygulamaları",["Görüntüleme-LCD-Plazma","Yarı İletken","Süper İletken","Nanoteknoloji","LASER"]],
+ ]],
+];
+
+const KIM=[
+ ["FAZ A · TYT Kimya",[
+   ["1 · Kimya Bilimi",["Simyadan Kimyaya","Kimya Disiplinleri","Kimyanın Sembolik Dili","İş Sağlığı ve Güvenliği"]],
+   ["2 · Atom ve Periyodik Sistem",["Atom Modelleri","Atomun Yapısı","Periyodik Yerleşim","Elementlerin Sınıflandırılması","Periyodik Özellikler"]],
+   ["3 · Türler Arası Etkileşimler",["Kimyasal Tür ve Sınıflandırma","Güçlü Etkileşimler","Zayıf Etkileşimler","Fiziksel-Kimyasal Değişim"]],
+   ["4 · Maddenin Hâlleri",["Fiziksel Hâller","Katılar ve Sıvılar","Gazlar ve Plazma"]],
+   ["5 · Doğa ve Kimya",["Su ve Hayat","Çevre Kimyası"]],
+   ["6 · Temel Kanunlar ve Hesaplamalar",["Kimyanın Temel Kanunları","Mol Kavramı","Tepkimeler ve Denklemler","Tepkimelerde Hesaplamalar"]],
+   ["7 · Karışımlar",["Homojen-Heterojen (I)","Homojen-Heterojen (II)","Ayırma ve Saflaştırma"]],
+   ["8 · Asitler, Bazlar ve Tuzlar",["Asit-Baz Özellikleri","Asit-Baz Tepkimeleri","Tuzlar"]],
+   ["9 · Kimya Her Yerde",["Günlük Hayat Kimyasalları","Kozmetik-İlaç-Gıda"]],
+ ]],
+ ["FAZ B · AYT Kimya I",[
+   ["10 · Modern Atom Teorisi",["Kuantum Modeli","Elektron Dizilimleri","Periyodik Özellikler","Elementleri Tanıyalım","Yükseltgenme Basamakları"]],
+   ["11 · Gazlar",["Gaz Yasaları","İdeal Gaz Yasası","Kinetik Teori-Gaz Karışımları","Gerçek Gazlar"]],
+   ["12 · Sıvı Çözeltiler ve Çözünürlük",["Çözücü-Çözünen","Derişim Birimleri","Koligatif Özellikler","Çözünürlük ve Faktörleri"]],
+   ["13 · Tepkimelerde Enerji",["Isı Değişimi-Entalpi","Bağ Enerjileri-Hess"]],
+   ["14 · Tepkimelerde Hız",["Tepkime Hızları","Hızı Etkileyen Faktörler"]],
+   ["15 · Tepkimelerde Denge",["Denge ve Faktörler","Sulu Çözelti Dengeleri (pH-pOH)","Tampon-Titrasyon","Çözünme-Çökelme Dengeleri"]],
+ ]],
+ ["FAZ C · AYT Kimya II",[
+   ["16 · Kimya ve Elektrik",["Redoks-Elektrik Akımı","Elektrotlar-Hücreler","Elektrot Potansiyelleri","Kimyasaldan Elektrik","Elektroliz","Korozyon"]],
+   ["17 · Karbon Kimyasına Giriş",["Anorganik-Organik/Formüller","Doğada Karbon","Lewis-Hibritleşme-Geometri"]],
+   ["18 · Organik Bileşikler",["Hidrokarbonlar-Fonksiyonel Gruplar","Alkanlar","Alkenler","Alkinler","Aromatik Hidrokarbonlar","Alkoller","Eterler","Aldehitler","Ketonlar","Karboksilik Asitler","Esterler"]],
+   ["19 · Enerji Kaynakları",["Fosil-Alternatif Enerji","Sürdürülebilirlik-Nanoteknoloji"]],
+ ]],
+];
+
+const TUR=[
+ ["FAZ A · Anlam",[
+   ["1 · Sözcükte Anlam",["Sözcükte Anlam 1","Sözcükte Anlam 2","Sözcükte Anlam 3","Sözcükte Anlam 4"]],
+   ["2 · Cümlede Anlam",["Cümlede Anlam 1","Cümlede Anlam 2","Cümlede Anlam 3"]],
+   ["3 · Paragrafta Anlam",["Paragrafta Anlam 1","Paragrafta Anlam 2","Paragrafta Anlam 3","Paragrafın Yapısı"]],
+ ]],
+ ["FAZ B · Dil Bilgisi I",[
+   ["4 · Ses Bilgisi",["Ses Bilgisi 1","Ses Bilgisi 2"]],
+   ["5 · Yazım Kuralları",["Yazım Kuralları 1","Yazım Kuralları 2","Yazım Kuralları 3"]],
+   ["6 · Noktalama İşaretleri",["Noktalama 1","Noktalama 2","Noktalama 3"]],
+   ["7 · Biçim Bilgisi",["Biçim Bilgisi 1","Biçim Bilgisi 2"]],
+ ]],
+ ["FAZ C · Dil Bilgisi II",[
+   ["8 · Sözcük Türleri",["İsim","Sıfat","Zamir","İsim ve Sıfat Tamlamaları","Zarf","Edat, Bağlaç ve Ünlem"]],
+   ["9 · Fiiller",["Fiilde Kip","Ek-Fiil","Fiilde Yapı","Fiilimsiler","Fiilde Çatı"]],
+   ["10 · Cümlenin Ögeleri",["Cümlenin Ögeleri"]],
+   ["11 · Cümle Türleri",["Cümle Türleri"]],
+   ["12 · Anlatım Bozuklukları",["Anlama Dayalı Bozukluklar","Yapıya Dayalı Bozukluklar"]],
+ ]],
+];
+
+const COG=[
+ ["FAZ A · Coğrafya I",[
+   ["1 · Coğrafya, İnsan ve Doğa",["Doğa-İnsan Etkileşimi","Coğrafyanın Konusu ve Bölümleri"]],
+   ["2 · Dünya'nın Şekli ve Hareketleri",["Şekli ve Günlük Hareket","Yıllık Hareket ve Eksen Eğikliği"]],
+   ["3 · Yer, Zaman, Koordinat",["Koordinat Sistemi","Yerel ve Ulusal Saat","Türkiye'nin Konumu"]],
+   ["4 · Harita Bilimi",["Harita Unsurları ve Çeşitleri","Haritalarda Hesaplamalar","Yer Şekillerini Haritaya Aktarma"]],
+   ["5 · İklim Bilimi",["Atmosfer-Hava-İklim","Sıcaklık","Basınç ve Rüzgârlar","Nem ve Yağış","İklim Tipleri","Türkiye İklimi"]],
+   ["6 · Yerleşmeler",["Yerleşme ve Türkiye'de Yerleşmeler"]],
+   ["7 · Bölgeler ve Ülkeler",["Bölge Sınıflandırması ve Türleri"]],
+ ]],
+ ["FAZ B · Coğrafya II",[
+   ["8 · İnsan ve Çevre",["Doğal Çevrenin Kullanımı"]],
+   ["9 · Dünya'nın Yapısı ve Oluşumu",["Tektonik Oluşum ve Jeolojik Zamanlar","İç Kuvvetler ve Kayaçlar","Dış Kuvvetler (Çözülme, Kütle, Rüzgâr, Buzul)","Dış Kuvvetler (Akarsular)","Dış Kuvvetler (Karstik, Dalga, Akıntı)","Türkiye'de Yer Şekilleri"]],
+   ["10 · Su, Toprak, Bitkiler",["Dünyada Su Kaynakları","Türkiye'de Su Kaynakları","Topraklar","Bitkiler"]],
+   ["11 · Nüfus, Göç, Ekonomi",["Nüfusun Özellikleri","Dağılış ve Piramitler","Türkiye Nüfusu","Göçler","Ekonomik Faaliyetler"]],
+   ["12 · Ulaşım",["Uluslararası Ulaşım Hatları"]],
+   ["13 · Afetler",["Genel Özellikler ve Sınıflandırma","Deprem, Tsunami, Volkanik, Kütle, Erozyon","Rüzgâr, Sel, Çığ, Yangın, Salgın"]],
+ ]],
+];
+const TAR=[
+ ["FAZ A · İlk Çağ, İslam, Selçuklu",[
+   ["1 · Tarih ve Zaman",["İnsanlığın Hafızası Tarih","Zamanın Taksimi"]],
+   ["2 · İlk ve Orta Çağ Türk Dünyası",["Avrasya'da İlk Türk İzleri","Boylardan Devlete-I","Boylardan Devlete-II","Kavimler Göçü"]],
+   ["3 · İslam Medeniyetinin Doğuşu",["İslamiyet'in Doğuşu ve Yayılışı","Emeviler","Abbasiler ve Türkler"]],
+   ["4 · Türklerin İslamiyet'i Kabulü",["Türklerin İslamiyet'i Kabulü","İslamiyet'in Etkisi","Büyük Selçuklu Devleti"]],
+   ["5 · Selçuklu Türkiyesi",["Anadolu'ya Yerleşme","İlk Türk Siyasi Teşekkülleri","Hilal-Haç Mücadelesi","Moğol İstilası"]],
+ ]],
+ ["FAZ B · Osmanlı: Kuruluştan Değişime",[
+   ["6 · Beylikten Devlete Siyaset",["Kuruluş ve İlk Fetihler","Rumeli İskân-İstimâlet","Anadolu Türk Birliği"]],
+   ["7 · Savaşçılar ve Askerler",["Devletleşme Sürecinde Savaşçılar"]],
+   ["8 · Beylikten Devlete Medeniyet",["Beylikten Devlete Osmanlı Medeniyeti"]],
+   ["9 · Dünya Gücü Osmanlı",["İstanbul'un Fethi","Türk İslam Birliği","Muhteşem Güç Osmanlı","Stratejik Siyaset"]],
+   ["10 · Sultan ve Merkez Teşkilatı",["Saray-Şehir Kültürü ve Devlet İdaresi"]],
+   ["11 · Klasik Çağ Toplum Düzeni",["Millet Sistemi","Toprak-Lonca-Vakıf"]],
+   ["12 · Değişen Dünya Dengeleri",["Uzun Savaşlardan Diplomasiye","Okyanuslar ve Sömürgecilik","Fetihlerden Savunmaya"]],
+   ["13 · Değişim Çağında Avrupa-Osmanlı",["Avrupa'da Değişim","Osmanlı'da Değişim","İsyanlar ve Düzen"]],
+   ["14 · Devrimler Çağı",["İhtilaller ve Sömürgecilik","Modern Orduya Geçiş","XIX. yy Sosyal Değişim"]],
+   ["15 · Denge Stratejisi (1774-1914)",["Tehditler-I","Demokratikleşme","Darbeler","Tehditler-II"]],
+   ["16 · Değişen Sosyo-Ekonomik Hayat",["Sanayileşme Çabaları","Nüfus, Metropol, Salgın"]],
+ ]],
+ ["FAZ C · Yakın Çağ ve Cumhuriyet",[
+   ["17 · XX. yy Başları ve Dünya",["Mustafa Kemal'in Yetişmesi","20. yy Başında Osmanlı","I. Dünya Savaşı","Savaşın Sonuçları"]],
+   ["18 · Millî Mücadele",["Hazırlık Dönemi-I","BMM ve Sevr","Cepheler","Sona Erme ve Lozan","Hazırlık Dönemi-II"]],
+   ["19 · Atatürkçülük ve İnkılap",["İlkeler, Siyasi-Hukuki Gelişmeler","Yapılan İnkılaplar"]],
+ ]],
+];
+const FEL=[
+ ["FAZ A · Felsefe Disiplinleri",[
+   ["1 · Felsefeyi Tanıma",["Felsefenin Anlamı","Ortaya Çıkışı ve Felsefe Sorusu","İnsan ve Toplum Hayatındaki Rolü"]],
+   ["2 · Felsefe ile Düşünme",["Akıl Yürütme Kavramları","Dil İlişkisi ve Argüman Sorgulama"]],
+   ["3 · Varlık Felsefesi",["Konusu ve Problemleri","Çağdaş Yaklaşımlar","Amaçlılık ve Sınıflandırma"]],
+   ["4 · Bilgi Felsefesi",["Konusu ve Bilginin İmkânı","Bilginin Kaynağı","Sınırları ve Doğruluk Ölçütü"]],
+   ["5 · Bilim Felsefesi",["Konusu ve Problemleri","Değeri ve İlişkileri","Ahlak Felsefesi"]],
+   ["6 · Din Felsefesi",["Konusu ve Tanrı'nın Varlığı","Soruları ve Teoloji"]],
+   ["7 · Siyaset Felsefesi",["Hak-Adalet-Özgürlük","İdeal Devlet ve Ütopya","Egemenlik ve Toplumsal Sorunlar"]],
+   ["8 · Sanat Felsefesi",["Güzellik ve Sanat Nedir","Sanat Kuramları ve Eser"]],
+   ["9 · Felsefi Okuma ve Yazma",["Felsefi Okuma ve Yazma"]],
+ ]],
+ ["FAZ B · Felsefe Tarihi",[
+   ["10 · MÖ 6 - MS 2. yy",["MÖ 6. yy - MS 2. yy Felsefesi"]],
+   ["11 · MS 2 - 15. yy",["MS 2. yy - 15. yy Felsefesi"]],
+   ["12 · 15 - 17. yy",["15. yy - 17. yy Felsefesi"]],
+   ["13 · 18 - 19. yy",["18. yy - 19. yy Felsefesi"]],
+   ["14 · 20. yy",["20. yy Felsefesi"]],
+ ]],
+];
+
+const DIN=[
+ ["FAZ A · Din Kültürü ve Ahlak Bilgisi",[
+   ["1 · Bilgi ve İnanç",["Bilgi ve İnanç"]],
+   ["2 · Din ve İslam",["Din ve İslam"]],
+   ["3 · İslam ve İbadet",["İslam ve İbadet"]],
+   ["4 · Gençlik ve Değerler",["Gençlik ve Değerler"]],
+   ["5 · Gönül Coğrafyamız",["Gönül Coğrafyamız"]],
+   ["6 · Allah-İnsan İlişkisi",["Allah-İnsan İlişkisi"]],
+   ["7 · Hz. Muhammed ve Gençlik",["Hz. Muhammed ve Gençlik"]],
+   ["8 · Din ve Hayat",["Din ve Hayat"]],
+   ["9 · Ahlaki Tutum ve Davranışlar",["Ahlaki Tutum ve Davranışlar"]],
+   ["10 · İtikadi, Siyasi ve Fıkhi Yorumlar",["İslam Düşüncesinde İtikadi, Siyasi ve Fıkhi Yorumlar"]],
+ ]],
+];
+
+const SUBJECTS=[
+ {key:"mat",name:"Matematik",color:"#6EE7B7",plan:MAT,days:[0,1,2,3,4,5],dayLabel:"her gün (Cmt hariç)"},
+ {key:"tur",name:"Türkçe",color:"#B39DDB",plan:TUR,days:[0,1,2,3,4,5],dayLabel:"her gün (Cmt hariç)"},
+ {key:"biy",name:"Biyoloji",color:"#57C9A0",plan:BIY,days:[1,4],dayLabel:"Pzt & Per"},
+ {key:"fiz",name:"Fizik",color:"#6FC3E8",plan:FIZ,days:[2,5],dayLabel:"Salı & Cuma"},
+ {key:"kim",name:"Kimya",color:"#F2A66B",plan:KIM,days:[3],dayLabel:"Çarşamba"},
+ {key:"cog",name:"Coğrafya",color:"#7FC8B8",plan:COG,days:[6],dayLabel:"Cumartesi"},
+ {key:"tar",name:"Tarih",color:"#D9B26A",plan:TAR,days:[6],dayLabel:"Cumartesi"},
+ {key:"fel",name:"Felsefe",color:"#E88FB0",plan:FEL,days:[0],dayLabel:"Pazar"},
+ {key:"din",name:"Din Kültürü",color:"#B8C77E",plan:DIN,days:[0],dayLabel:"Pazar"},
+];
+const TABS=[{key:"_genel",name:"Genel"},...SUBJECTS];
+
+const MONTHS=["Oca","Şub","Mar","Nis","May","Haz","Tem","Ağu","Eyl","Eki","Kas","Ara"];
+const DAYS=["Paz","Pzt","Sal","Çar","Per","Cum","Cmt"];
+function dstr(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function fmtShort(d){return d.getDate()+" "+MONTHS[d.getMonth()];}
+function fmtFull(d){return d.getDate()+" "+MONTHS[d.getMonth()]+" "+DAYS[d.getDay()];}
+const todayD=new Date(); todayD.setHours(0,0,0,0); const todayKey=dstr(todayD);
+function todayStr(){return dstr(new Date());}
+
+/* ===== Takvim: 6 Tem 2026 – 18 Haz 2028, alt konular döngüyle ===== */
+const START=new Date(2026,6,6), END=new Date(2028,5,18);
+function schedule(plan,days){
+  const ids=[]; plan.forEach((ph,pi)=>ph[1].forEach((h,hi)=>h[1].forEach((s,si)=>ids.push(`${pi}-${hi}-${si}`))));
+  const slots=[]; let d=new Date(START);
+  while(d<=END){ if(days.includes(d.getDay())) slots.push(new Date(d)); d.setDate(d.getDate()+1); }
+  const subMap={};
+  slots.forEach((dt,i)=>{const id=ids[i%ids.length];const round=Math.floor(i/ids.length)+1;(subMap[id]=subMap[id]||[]).push({date:dt,round});});
+  return {subMap};
+}
+const SCH={}; SUBJECTS.forEach(sj=>SCH[sj.key]=schedule(sj.plan,sj.days));
+
+/* ===== Durum & depolama ===== */
+const STATES=["Başlanmadı","Öğrenildi","Soru çözüldü","Pekişti"];
+const KEY="yks-panom-v2"; let prog={}; let active=0;
+function tab(){return TABS[active];}
+function ensureSub(sk,id){if(!prog[sk])prog[sk]={};const b=prog[sk];let p=b[id];if(!p||typeof p!=="object"||Array.isArray(p))p=b[id]={l:0,s:[],c:[]};if(!p.s)p.s=[];if(!p.c)p.c=[];return p;}
+function denArr(kind){if(kind==="tyt")return prog._tyt||(prog._tyt=[]);if(kind==="ayt")return prog._ayt||(prog._ayt=[]);if(kind==="kismi")return prog._kismi||(prog._kismi=[]);const sk=tab().key;if(!prog[sk])prog[sk]={};return prog[sk]._mini||(prog[sk]._mini=[]);}
+function logArr(key){if(!prog._logs)prog._logs={};if(!prog._logs[key])prog._logs[key]=[];return prog._logs[key];}
+function sumLog(a){return (a||[]).reduce((x,e)=>x+(+e.q||0),0);}
+function stageOf(p){const n=((p&&p.s)?p.s.length:0)+((p&&p.c)?p.c.length:0);const l=!!(p&&(p.l||n>0));if(l&&n>=2)return 3;if(l&&n>=1)return 2;if(l)return 1;return 0;}
+function save(){const s=JSON.stringify(prog);try{localStorage.setItem(KEY,s);}catch(e){}try{if(window.storage)window.storage.set(KEY,s,false);}catch(e){}}
+async function load(){
+  try{const v=localStorage.getItem(KEY);if(v){prog=JSON.parse(v);return;}}catch(e){}
+  try{if(window.storage){const r=await window.storage.get(KEY,false);if(r&&r.value){prog=JSON.parse(r.value);return;}}}catch(e){}
+  try{const v1=localStorage.getItem("yks-mat-biy-v1");if(v1){prog=JSON.parse(v1);return;}}catch(e){}
+  try{if(window.storage){const o=await window.storage.get("yks-mat-biy-v1",false);if(o&&o.value){prog=JSON.parse(o.value);return;}
+    const o2=await window.storage.get("yks-mat-log-v2",false);if(o2&&o2.value){prog={mat:JSON.parse(o2.value)};return;}}}catch(e){}
+  prog={};
+}
+
+/* ===== İstatistik ===== */
+function subjStats(sk){let t=0,learned=0,rein=0,sSum=0,cSum=0;const b=prog[sk]||{};const sj=SUBJECTS.find(x=>x.key===sk);
+  sj.plan.forEach((ph,pi)=>ph[1].forEach((h,hi)=>h[1].forEach((s,i)=>{t++;const p=b[`${pi}-${hi}-${i}`];const n=((p&&p.s)?p.s.length:0)+((p&&p.c)?p.c.length:0);if(p&&(p.l||n>0))learned++;if(n>=2)rein++;if(p){sSum+=sumLog(p.s);cSum+=sumLog(p.c);}})));
+  return {t,learned,rein,sSum,cSum};}
+function globalTotals(){let soru=0,cik=0,rein=0,tot=0;SUBJECTS.forEach(sj=>{const st=subjStats(sj.key);soru+=st.sSum;cik+=st.cSum;rein+=st.rein;tot+=st.t;});
+  const avg=a=>a&&a.length?Math.round(sumLog(a)/a.length):0;const tyt=prog._tyt||[],ayt=prog._ayt||[],kismi=prog._kismi||[];
+  const L=prog._logs||{};const pkgP=sumLog(L.paragraf),pkgG=sumLog(L.geometri),pkgPr=sumLog(L.problem);const pkg=pkgP+pkgG+pkgPr;
+  return {soru,cik,rein,tot,tytN:tyt.length,tytAvg:avg(tyt),aytN:ayt.length,aytAvg:avg(ayt),kismiN:kismi.length,kismiAvg:avg(kismi),pkg,pkgP,pkgG,pkgPr,grand:soru+cik+pkg};}
+
+/* ===== Sekmeler ===== */
+function renderTabs(){const el=document.getElementById("tabs");el.innerHTML="";
+  TABS.forEach((tb,i)=>{const b=document.createElement("div");b.className="tab"+(i===active?" on":"");
+    if(tb.key==="_genel"){b.style.background=i===active?"#C9A24B":"";b.innerHTML=`<span class="bd" style="background:#C9A24B"></span>Genel`;}
+    else{const st=subjStats(tb.key);const pc=st.t?Math.round(st.rein/st.t*100):0;b.style.background=i===active?tb.color:"";
+      b.innerHTML=`<span class="bd" style="background:${tb.color}"></span>${tb.name} <span class="tp" ${i===active?'style="color:#0A1213"':""}>${pc}%</span>`;}
+    b.addEventListener("click",()=>{active=i;renderAll();window.scrollTo({top:0,behavior:"smooth"});});
+    el.appendChild(b);});}
+
+/* ===== Deneme kartı ===== */
+function denCardHTML(kind,title){
+  if(kind==="kismi"){const opts=SUBJECTS.map(s=>`<option value="${s.name}">${s.name}</option>`).join("")+'<option value="Karma">Karma/Genel</option>';
+    return `<div class="den-card" data-den="kismi"><div class="den-head"><span>${title}</span><span class="den-tot"></span></div>
+      <div class="sess-list"></div>
+      <div class="add-row"><span class="lbl">Ders:</span><select class="qin den-sel">${opts}</select><input class="qin den-in" type="number" min="0" step="1" placeholder="net"><button class="add-sess den-add">+ Ekle</button></div></div>`;}
+  return `<div class="den-card" data-den="${kind}"><div class="den-head"><span>${title}</span><span class="den-tot"></span></div>
+    <div class="sess-list"></div>
+    <div class="add-row"><span class="lbl">Net:</span><input class="qin den-in" type="number" min="0" step="1" placeholder="net"><button class="add-sess den-add">+ Deneme ekle</button></div></div>`;}
+function logCardHTML(key,title,presets){return `<div class="den-card" data-log2="${key}"><div class="den-head"><span>${title}</span><span class="den-tot"></span></div><div class="sess-list"></div><div class="add-row"><span class="lbl">Soru:</span>${presets.map(n=>`<button class="preset2" data-n="${n}">${n}</button>`).join("")}<input class="qin log2-in" type="number" min="1" placeholder="…"><button class="add-sess log2-add">+ Ekle</button></div></div>`;}
+function renderLog2(key){const card=document.querySelector(`.den-card[data-log2="${key}"]`);if(!card)return;const arr=logArr(key);const sum=sumLog(arr);
+  card.querySelector(".den-tot").textContent=arr.length?`${sum} soru · ${arr.length} kayıt`:"";
+  const list=card.querySelector(".sess-list");
+  if(!arr.length)list.innerHTML='<div class="sess-empty">Henüz eklenmedi.</div>';
+  else list.innerHTML=arr.map((x,i)=>`<div class="sess"><span class="lab">${x.d?fmtShort(new Date(x.d)):"—"}</span><span class="q">${x.q} soru</span><button class="del log2-del" data-key="${key}" data-i="${i}">×</button></div>`).join("");}
+function renderDen(kind){const card=document.querySelector(`.den-card[data-den="${kind}"]`);if(!card)return;
+  const arr=denArr(kind);const cnt=arr.length;const list=card.querySelector(".sess-list");
+  if(kind==="kismi"){const by={};arr.forEach(x=>{const k=x.subj||"?";by[k]=(by[k]||0)+1;});const brk=Object.keys(by).map(k=>`${k} ${by[k]}`).join(" · ");
+    card.querySelector(".den-tot").textContent=cnt?`${cnt} deneme${brk?" · "+brk:""}`:"";
+    list.innerHTML=cnt?arr.map((x,i)=>`<div class="sess"><span class="lab">${x.subj||"?"}</span><span class="q">${x.q} net</span><span class="dt">${x.d?fmtShort(new Date(x.d)):""}</span><button class="del den-del" data-i="${i}">×</button></div>`).join(""):'<div class="sess-empty">Henüz kısmi deneme eklenmedi.</div>';
+    return;}
+  const avg=cnt?Math.round(sumLog(arr)/cnt):0;
+  card.querySelector(".den-tot").textContent=cnt?`${cnt} deneme · ort. ${avg} net`:"";
+  if(!cnt)list.innerHTML='<div class="sess-empty">Henüz deneme eklenmedi.</div>';
+  else list.innerHTML=arr.map((x,i)=>`<div class="sess"><span class="lab">Deneme ${i+1}</span><span class="q">${x.q} net</span><span class="dt">${x.d?fmtShort(new Date(x.d)):""}</span><button class="del den-del" data-i="${i}">×</button></div>`).join("");}
+
+/* ===== Genel sekmesi ===== */
+let CAL=null;
+function buildCal(){ if(CAL)return CAL; CAL=new Map();
+  SUBJECTS.forEach(sj=>{const sc=SCH[sj.key];Object.keys(sc.subMap).forEach(id=>{const a=id.split("-").map(Number);const label=sj.plan[a[0]][1][a[1]][1][a[2]];
+    sc.subMap[id].forEach(x=>{const k=dstr(x.date);if(!CAL.has(k))CAL.set(k,[]);CAL.get(k).push({color:sj.color,subj:sj.name,label,round:x.round,order:SUBJECTS.indexOf(sj),sk:sj.key,id});});});});
+  return CAL;}
+function monthsList(){const arr=[];let y=START.getFullYear(),m=START.getMonth();const ey=END.getFullYear(),em=END.getMonth();
+  while(y<ey||(y===ey&&m<=em)){arr.push([y,m]);m++;if(m>11){m=0;y++;}}return arr;}
+function calendarHTML(){const now=new Date();const cy=now.getFullYear(),cm=now.getMonth();
+  return '<div class="sechead">— Gün Gün Tam Takvim —</div>'
+    +'<div class="callegend"><span><i style="background:var(--s0)"></i>öğrenilmedi</span><span><i style="background:var(--s1)"></i>öğrenildi</span><span><i style="background:var(--s2)"></i>soru çözüldü</span><span><i style="background:var(--s3)"></i>pekişti</span></div>'
+    +monthsList().map(([y,m])=>{const isCur=(y===cy&&m===cm);
+    return `<div class="calmonth${isCur?" open":""}" data-y="${y}" data-m="${m}"><div class="cm-head"><span>${MONTHS[m]} ${y}</span><span class="ph-chev">▾</span></div><div class="cm-body"></div></div>`;}).join("");}
+function fillMonth(el){if(el.dataset.filled)return;el.dataset.filled="1";const y=+el.dataset.y,m=+el.dataset.m;const cal=buildCal();
+  const dim=new Date(y,m+1,0).getDate();let rows="";
+  for(let day=1;day<=dim;day++){const d=new Date(y,m,day);if(d<START||d>END)continue;const k=dstr(d);
+    const items=(cal.get(k)||[]).slice().sort((a,b)=>a.order-b.order);
+    let inner=items.length?items.map(x=>{const st=stageOf((prog[x.sk]||{})[x.id]);return `<span class="cd-item st${st}" style="--c:${x.color}"><span class="cdot"></span>${x.subj}: ${x.label}${x.round>1?` <b>T${x.round}</b>`:""}</span>`;}).join(""):'<span class="cd-rest">—</span>';
+    inner+='<span class="cd-pkg">＋ Günlük paket: 10 paragraf · 10 geometri · 10 problem</span>';
+    rows+=`<div class="calday${k===todayKey?" today":""}"><div class="cd-date">${DAYS[d.getDay()]} · ${d.getDate()}</div><div class="cd-items">${inner}</div></div>`;}
+  el.querySelector(".cm-body").innerHTML=rows;}
+function renderGenelDash(){const g=globalTotals();
+  document.getElementById("dash").innerHTML=`<div class="gcards">
+    <div class="gcard grand"><div class="gv">${g.grand}</div><div class="gl">TOPLAM ÇÖZÜLEN SORU · her şey dahil</div></div>
+    <div class="gcard"><div class="gv">${g.soru}</div><div class="gl">Konu soruları</div></div>
+    <div class="gcard"><div class="gv" style="color:var(--s2)">${g.cik}</div><div class="gl">Çıkmış soru</div></div>
+    <div class="gcard"><div class="gv">${g.pkg}</div><div class="gl">Günlük paket (P${g.pkgP}·G${g.pkgG}·Pr${g.pkgPr})</div></div>
+    <div class="gcard"><div class="gv">${g.tytN}</div><div class="gl">TYT deneme · ort ${g.tytAvg}</div></div>
+    <div class="gcard"><div class="gv">${g.aytN}</div><div class="gl">AYT deneme · ort ${g.aytAvg}</div></div>
+    <div class="gcard"><div class="gv">${g.kismiN}</div><div class="gl">Kısmi deneme · ort ${g.kismiAvg}</div></div>
+    <div class="gcard"><div class="gv">${g.rein}/${g.tot}</div><div class="gl">Pekişen konu (tüm dersler)</div></div></div>`;}
+function renderGenel(){
+  document.getElementById("subName").textContent="Genel Bakış";
+  document.getElementById("subTag").textContent="Tüm dersler · deneme + toplamlar · 6 Tem 2026 – 18 Haz 2028";
+  document.getElementById("todayStrip").style.display="none";
+  renderGenelDash();
+  let html='<div class="sechead">— Günlük Paket (her gün · toplama dahil) —</div>'
+    +logCardHTML("paragraf","Paragraf",[10,20])+logCardHTML("geometri","Geometri",[10,20])+logCardHTML("problem","Problem",[10,20])
+    +'<div class="sechead">— Tüm Dersler Deneme —</div>'+denCardHTML("tyt","TYT Denemeleri")+denCardHTML("ayt","AYT Denemeleri")+denCardHTML("kismi","Kısmi Denemeler");
+  html+='<div class="sechead">— Derslere Git —</div><div class="mini-sum">'+SUBJECTS.map((sj,idx)=>{const st=subjStats(sj.key);const pc=st.t?Math.round(st.rein/st.t*100):0;
+    return `<div class="ov" data-goto="${idx+1}"><div class="n"><span class="bd" style="background:${sj.color}"></span>${sj.name}</div><div class="bar"><i style="width:${pc}%;background:${sj.color}"></i></div><div class="m">${st.rein}/${st.t} pekişti · ${st.sSum} soru · ${st.cSum} çıkmış</div></div>`;}).join("")+"</div>";
+  html+=calendarHTML();
+  document.getElementById("phases").innerHTML=html;
+  ["paragraf","geometri","problem"].forEach(renderLog2);
+  renderDen("tyt");renderDen("ayt");renderDen("kismi");
+  document.querySelectorAll(".calmonth.open").forEach(fillMonth);}
+
+/* ===== Ders sekmesi ===== */
+function renderSubjectDash(sj){const st=subjStats(sj.key);const onlyL=st.learned-st.rein;const C=301.6;
+  document.getElementById("dash").innerHTML=`
+    <div class="ring"><svg width="112" height="112"><circle cx="56" cy="56" r="48" stroke="rgba(201,162,75,.16)" stroke-width="9" fill="none"/>
+      <circle cx="56" cy="56" r="48" stroke="var(--s1)" stroke-width="9" fill="none" stroke-linecap="round" stroke-dasharray="301.6" stroke-dashoffset="${C-C*st.learned/(st.t||1)}" opacity=".5"/>
+      <circle cx="56" cy="56" r="48" stroke="var(--life)" stroke-width="9" fill="none" stroke-linecap="round" stroke-dasharray="301.6" stroke-dashoffset="${C-C*st.rein/(st.t||1)}"/></svg>
+      <div class="val"><b>${st.t?Math.round(st.rein/st.t*100):0}%</b><span>PEKİŞTİ</span></div></div>
+    <div class="dstats">
+      <div class="dstat"><i style="background:var(--s1)"></i>Öğrenilen (toplam) <b>${st.learned}</b> <span>${st.learned}/${st.t}</span></div>
+      <div class="dstat sub2"><i style="background:var(--s3)"></i>↳ Pekişen <b>${st.rein}</b></div>
+      <div class="dstat sub2"><i class="hollow"></i>↳ Sadece öğrenilen <b>${onlyL}</b></div>
+      <div class="dstat"><i style="background:var(--s2)"></i>Çözülen soru <b>${st.sSum}</b> <span>çıkmış ${st.cSum}</span></div>
+    </div>`;}
+function renderSubject(){
+  const sj=tab();const sc=SCH[sj.key];
+  document.getElementById("todayStrip").style.display="";
+  document.getElementById("subName").textContent=sj.name;
+  const allDates=Object.values(sc.subMap).flat().map(x=>x.date).sort((a,b)=>a-b);
+  const nSub=Object.keys(sc.subMap).length;
+  document.getElementById("subTag").textContent=`${nSub} konu · ${sj.dayLabel} · ${fmtShort(allDates[0])} ${allDates[0].getFullYear()} – ${fmtShort(allDates[allDates.length-1])} ${allDates[allDates.length-1].getFullYear()}`;
+  renderSubjectDash(sj);
+  let html=denCardHTML("mini","Branş Denemesi · "+sj.name);
+  sj.plan.forEach((ph,pi)=>{let open=false;let inner="";
+    ph[1].forEach((h,hi)=>{let subs="";
+      h[1].forEach((s,si)=>{const id=`${pi}-${hi}-${si}`;const ds=(sc.subMap[id]||[]).slice().sort((a,b)=>a.date-b.date);
+        const isToday=ds.some(x=>dstr(x.date)===todayKey);if(isToday)open=true;
+        const allPast=ds.length&&ds.every(x=>x.date<todayD);
+        const up=ds.filter(x=>x.date>=todayD);const show=(up.length?up:ds.slice(-1)).slice(0,3);
+        let chips=show.map(x=>`<span class="dchip${dstr(x.date)===todayKey?" t":""}${x.round>1?" rep":""}">${fmtShort(x.date)}${x.round>1?" T"+x.round:""}</span>`).join("");
+        if(ds.length>show.length)chips+=`<span class="dchip more">↻${ds.length}</span>`;
+        subs+=`<div class="sub-wrap${isToday?" today":(allPast?" past":"")}" data-id="${id}" data-s="0">
+          <div class="sub"><span class="dot"></span><div class="sub-main"><span class="txt">${s}</span><span class="dchips">${chips}</span></div><span class="qtot"></span><span class="st">Başlanmadı</span><span class="chev">▾</span></div>
+          <div class="detail"><div class="detail-in">
+            <button class="learn-btn"><span class="bx"></span>Konu öğrenildi</button>
+            <div class="sess-head"><span>Soru çözümü</span><span class="sess-tot" data-tot="s"></span></div><div class="sess-list" data-list="s"></div>
+            <div class="add-row"><span class="lbl">Soru:</span><button class="preset" data-log="s" data-n="10">10</button><button class="preset" data-log="s" data-n="20">20</button><button class="preset" data-log="s" data-n="30">30</button><input class="qin" data-log="s" type="number" min="1" placeholder="…"><button class="add-sess" data-log="s">+ Ekle</button></div>
+            <div class="sess-head" style="color:var(--s2)"><span>Çıkmış soru (ÖSYM)</span><span class="sess-tot" data-tot="c"></span></div><div class="sess-list" data-list="c"></div>
+            <div class="add-row"><span class="lbl">Çıkmış:</span><button class="preset" data-log="c" data-n="5">5</button><button class="preset" data-log="c" data-n="10">10</button><button class="preset" data-log="c" data-n="20">20</button><input class="qin" data-log="c" type="number" min="1" placeholder="…"><button class="add-sess" data-log="c">+ Ekle</button></div>
+          </div></div></div>`;
+      });
+      inner+=`<div class="heading"><div class="hd-title">${h[0]}</div><div class="subs">${subs}</div></div>`;
+    });
+    html+=`<div class="phase${open?" now open":""}"><div class="ph-head"><span class="ph-no">${ph[0].split(" · ")[0]}</span><span class="ph-tit">${ph[0].split(" · ").slice(1).join(" · ")||ph[0]}</span>${open?'<span class="now-badge">şu an</span>':""}<span class="ph-prog" data-pi="${pi}">0%</span><span class="ph-chev">▾</span></div><div class="ph-body"><div class="ph-inner">${inner}</div></div></div>`;
+  });
+  document.getElementById("phases").innerHTML=html;
+  document.querySelectorAll("#phases .ph-head").forEach(hd=>hd.addEventListener("click",()=>hd.parentElement.classList.toggle("open")));
+  document.querySelectorAll(".sub-wrap").forEach(el=>renderSub(sj.key,el.dataset.id));
+  renderDen("mini");updatePhaseProg(sj.key);updateTodayStrip();
+}
+function fillLog(wrap,key,arr,sum,unit){
+  wrap.querySelector(`.sess-tot[data-tot="${key}"]`).textContent=(arr&&arr.length)?`${sum} ${unit}`:"";
+  const list=wrap.querySelector(`.sess-list[data-list="${key}"]`);
+  if(!arr||!arr.length){list.innerHTML='<div class="sess-empty">—</div>';return;}
+  list.innerHTML=arr.map((x,i)=>`<div class="sess"><span class="lab ${i>0?"rep":""}">${i+1}. çözüm</span><span class="q">${x.q} ${unit}</span><span class="dt">${x.d?fmtShort(new Date(x.d)):""}</span><button class="del" data-log="${key}" data-i="${i}">×</button></div>`).join("");
+}
+function renderSub(sk,id){const wrap=document.querySelector(`.sub-wrap[data-id="${id}"]`);if(!wrap)return;
+  const p=(prog[sk]&&prog[sk][id])||{l:0,s:[],c:[]};const st=stageOf(p);
+  wrap.dataset.s=st;wrap.querySelector(".st").textContent=STATES[st];
+  const sSum=sumLog(p.s),cSum=sumLog(p.c);
+  wrap.querySelector(".qtot").textContent=(sSum+cSum)?(sSum+cSum)+" soru":"";
+  wrap.querySelector(".learn-btn").classList.toggle("on",!!p.l);
+  wrap.querySelector(".learn-btn .bx").textContent=p.l?"✓":"";
+  fillLog(wrap,"s",p.s,sSum,"soru");fillLog(wrap,"c",p.c,cSum,"çıkmış");
+}
+function updatePhaseProg(sk){const sj=SUBJECTS.find(x=>x.key===sk);sj.plan.forEach((ph,pi)=>{let t=0,d=0;ph[1].forEach((h,hi)=>h[1].forEach((s,i)=>{t++;const p=prog[sk]&&prog[sk][`${pi}-${hi}-${i}`];const n=((p&&p.s)?p.s.length:0)+((p&&p.c)?p.c.length:0);if(n>=2)d++;}));const e=document.querySelector(`.ph-prog[data-pi="${pi}"]`);if(e)e.textContent=t?Math.round(d/t*100)+"%":"—";});}
+function updateTodayStrip(){const sj=tab();if(sj.key==="_genel")return;const sc=SCH[sj.key];
+  let entries=[];sj.plan.forEach((ph,pi)=>ph[1].forEach((h,hi)=>h[1].forEach((s,si)=>{(sc.subMap[`${pi}-${hi}-${si}`]||[]).forEach(x=>entries.push({d:x.date,label:s,round:x.round}));})));
+  entries.sort((a,b)=>a.d-b.d);
+  const tod=entries.find(e=>dstr(e.d)===todayKey);const nx=entries.find(e=>e.d>todayD);
+  const lbl=document.getElementById("tsLbl"),txt=document.getElementById("tsTxt");
+  const nextLine=nx?`Sonraki ${sj.name} günü: ${fmtFull(nx.d)} · ${nx.label}${nx.round>1?` (${nx.round}.tekrar)`:""}`:`Sonraki ${sj.name} günü: — (program bitti)`;
+  lbl.textContent="Bugün";
+  if(tod){txt.innerHTML=`Bugün <b>${sj.name} VAR</b>: ${tod.label}${tod.round>1?` (${tod.round}.tekrar)`:""}<small>${nextLine}</small>`;}
+  else{txt.innerHTML=`Bugün <b>${sj.name} yok</b> (soru/tekrar günü)<small>${nextLine}</small>`;}
+}
+
+function renderAll(){renderTabs();if(tab().key==="_genel")renderGenel();else renderSubject();}
+function refreshTop(){renderTabs();if(tab().key==="_genel")renderGenelDash();else{renderSubjectDash(tab());updatePhaseProg(tab().key);updateTodayStrip();}}
+
+/* ===== Olaylar ===== */
+function addLog(sk,id,key,n){const p=ensureSub(sk,id);if(!p.l)p.l=1;(key==="s"?p.s:p.c).push({q:n,d:todayStr()});save();renderSub(sk,id);refreshTop();}
+document.getElementById("phases").addEventListener("click",e=>{
+  const cm=e.target.closest(".cm-head");
+  if(cm){const mo=cm.parentElement;const willOpen=!mo.classList.contains("open");mo.classList.toggle("open");if(willOpen)fillMonth(mo);return;}
+  const card=e.target.closest(".den-card");
+  if(card){
+    if(card.dataset.log2!==undefined){const key=card.dataset.log2;
+      const pr=e.target.closest(".preset2");
+      if(pr){logArr(key).push({q:+pr.dataset.n,d:todayStr()});save();renderLog2(key);refreshTop();return;}
+      if(e.target.closest(".log2-add")){const inp=card.querySelector(".log2-in");const n=parseInt(inp.value,10);if(n>0){logArr(key).push({q:n,d:todayStr()});save();renderLog2(key);refreshTop();inp.value="";}return;}
+      if(e.target.closest(".log2-del")){const i=+e.target.closest(".log2-del").dataset.i;logArr(key).splice(i,1);save();renderLog2(key);refreshTop();return;}
+      return;}
+    const kind=card.dataset.den;
+    if(e.target.closest(".den-add")){const inp=card.querySelector(".den-in");const n=parseInt(inp.value,10);if(!isNaN(n)&&n>=0){const entry={q:n,d:todayStr()};if(kind==="kismi"){const sel=card.querySelector(".den-sel");entry.subj=sel?sel.value:"Karma";}denArr(kind).push(entry);save();renderDen(kind);refreshTop();inp.value="";}return;}
+    if(e.target.closest(".den-del")){const i=+e.target.closest(".den-del").dataset.i;denArr(kind).splice(i,1);save();renderDen(kind);refreshTop();return;}
+    return;}
+  const goto=e.target.closest("[data-goto]");if(goto){active=+goto.dataset.goto;renderAll();window.scrollTo({top:0,behavior:"smooth"});return;}
+  const wrap=e.target.closest(".sub-wrap");if(!wrap)return;const sk=tab().key;const id=wrap.dataset.id;
+  if(e.target.closest(".learn-btn")){const p=ensureSub(sk,id);p.l=p.l?0:1;save();renderSub(sk,id);refreshTop();return;}
+  const preset=e.target.closest(".preset");if(preset){addLog(sk,id,preset.dataset.log,+preset.dataset.n);return;}
+  const add=e.target.closest(".add-sess");if(add){const key=add.dataset.log;const inp=wrap.querySelector(`.qin[data-log="${key}"]`);const n=parseInt(inp.value,10);if(n>0){addLog(sk,id,key,n);inp.value="";}return;}
+  const del=e.target.closest(".del");if(del){const key=del.dataset.log;const i=+del.dataset.i;const p=ensureSub(sk,id);(key==="s"?p.s:p.c).splice(i,1);save();renderSub(sk,id);refreshTop();return;}
+  if(e.target.closest(".sub")){wrap.classList.toggle("open");}
+});
+document.getElementById("phases").addEventListener("keydown",e=>{if(e.key!=="Enter")return;
+  if(e.target.classList.contains("den-in")){const card=e.target.closest(".den-card");const kind=card.dataset.den;const n=parseInt(e.target.value,10);if(!isNaN(n)&&n>=0){const entry={q:n,d:todayStr()};if(kind==="kismi"){const sel=card.querySelector(".den-sel");entry.subj=sel?sel.value:"Karma";}denArr(kind).push(entry);save();renderDen(kind);refreshTop();e.target.value="";}return;}
+  if(e.target.classList.contains("log2-in")){const card=e.target.closest(".den-card");const key=card.dataset.log2;const n=parseInt(e.target.value,10);if(n>0){logArr(key).push({q:n,d:todayStr()});save();renderLog2(key);refreshTop();e.target.value="";}return;}
+  if(e.target.classList.contains("qin")){const wrap=e.target.closest(".sub-wrap");if(!wrap)return;const key=e.target.dataset.log;const n=parseInt(e.target.value,10);if(n>0){addLog(tab().key,wrap.dataset.id,key,n);e.target.value="";}}
+});
+document.getElementById("expandAll").addEventListener("click",()=>{const any=[...document.querySelectorAll(".phase")].some(p=>!p.classList.contains("open"));document.querySelectorAll(".phase").forEach(p=>p.classList.toggle("open",any));});
+const io=document.getElementById("io");
+document.getElementById("ioBtn").addEventListener("click",()=>{io.style.display=io.style.display==="block"?"none":"block";});
+document.getElementById("exportBtn").addEventListener("click",()=>{const t=document.getElementById("ioText");t.value=JSON.stringify(prog);t.select();try{document.execCommand("copy");}catch(e){}t.blur();});
+document.getElementById("importBtn").addEventListener("click",()=>{try{prog=JSON.parse(document.getElementById("ioText").value.trim());save();renderAll();io.style.display="none";}catch(e){alert("Kod okunamadı.");}});
+document.getElementById("resetBtn").addEventListener("click",()=>{const t=tab();
+  if(t.key==="_genel"){if(confirm("TÜM ilerleme (tüm dersler + denemeler) sıfırlansın mı?")){prog={};save();renderAll();}}
+  else if(confirm(t.name+" dersindeki ilerleme sıfırlansın mı?")){prog[t.key]={};save();renderAll();}});
+(async()=>{await load();renderAll();})();
+if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("./sw.js");
+</script>
+</body>
+</html>
