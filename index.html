@@ -127,6 +127,13 @@
   .den-head{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--serif);font-size:18px;font-weight:600;color:var(--parch);margin-bottom:10px}
   .den-tot{font-family:var(--mono);font-size:11px;color:var(--s2);font-weight:400}
   .den-in{width:82px}
+  .den-right{display:flex;gap:9px;align-items:center}
+  .den-card.fold .den-head{cursor:pointer;user-select:none;margin-bottom:0}
+  .den-card.fold.open .den-head{margin-bottom:10px}
+  .den-card.fold .den-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+  .den-card.fold.open .den-body{max-height:1400px}
+  .den-card.fold.open .den-head .ph-chev{transform:rotate(180deg)}
+  .den-card.fold .sess-list{max-height:240px;overflow-y:auto}
   .gcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;width:100%}
   .gcard{border:1px solid var(--line);border-radius:12px;background:linear-gradient(180deg,var(--panel-2),var(--ink-2));padding:16px;text-align:center}
   .gcard.grand{grid-column:1/-1;border-color:color-mix(in srgb,var(--life) 45%,transparent);background:linear-gradient(180deg,color-mix(in srgb,var(--life) 12%,transparent),var(--ink-2))}
@@ -164,6 +171,9 @@
   .callegend i{width:11px;height:11px;border-radius:3px}
   .dchip.more{color:var(--brass);border-color:var(--brass-dim);background:rgba(201,162,75,.08)}
   .cd-pkg{font-size:11px;color:var(--brass-dim);font-style:italic}
+  .cd-pkg.pk1{background:color-mix(in srgb,var(--s1) 30%,transparent);border:1px solid color-mix(in srgb,var(--s1) 55%,transparent);border-radius:6px;padding:2px 8px;color:#eef7fb;font-style:normal}
+  .cd-pkg.pk2{background:color-mix(in srgb,var(--s2) 32%,transparent);border:1px solid color-mix(in srgb,var(--s2) 55%,transparent);border-radius:6px;padding:2px 8px;color:#fdf6e6;font-style:normal}
+  .cd-pkg.pk3{background:color-mix(in srgb,var(--s3) 38%,transparent);border:1px solid color-mix(in srgb,var(--s3) 65%,transparent);border-radius:6px;padding:2px 8px;color:#eafff6;font-weight:600;font-style:normal}
   .preset2{font-family:var(--mono);font-size:13px;cursor:pointer;background:var(--ink-2);border:1px solid var(--line);color:var(--parch);border-radius:7px;padding:8px 12px}
   .preset2:active{border-color:var(--s2);color:var(--s2)}
   .den-sel{width:auto;padding:8px 9px;background:var(--ink-2);border:1px solid var(--line);color:var(--parch);border-radius:7px;font-family:var(--sans);font-size:13px}
@@ -494,6 +504,10 @@ function globalTotals(){let soru=0,cik=0,rein=0,tot=0;SUBJECTS.forEach(sj=>{cons
   const avg=a=>a&&a.length?Math.round(sumLog(a)/a.length):0;const tyt=prog._tyt||[],ayt=prog._ayt||[],kismi=prog._kismi||[];
   const L=prog._logs||{};const pkgP=sumLog(L.paragraf),pkgG=sumLog(L.geometri),pkgPr=sumLog(L.problem);const pkg=pkgP+pkgG+pkgPr;
   return {soru,cik,rein,tot,tytN:tyt.length,tytAvg:avg(tyt),aytN:ayt.length,aytAvg:avg(ayt),kismiN:kismi.length,kismiAvg:avg(kismi),pkg,pkgP,pkgG,pkgPr,grand:soru+cik+pkg};}
+function todaySolved(){const tk=todayStr();let n=0;
+  SUBJECTS.forEach(sj=>{const b=prog[sj.key]||{};Object.keys(b).forEach(id=>{const p=b[id];if(!p||typeof p!=="object"||Array.isArray(p))return;["s","c"].forEach(kk=>(p[kk]||[]).forEach(e=>{if(e.d===tk)n+=(+e.q||0);}));});});
+  const L=prog._logs||{};["paragraf","geometri","problem"].forEach(kk=>(L[kk]||[]).forEach(e=>{if(e.d===tk)n+=(+e.q||0);}));
+  return n;}
 
 /* ===== Sekmeler ===== */
 function renderTabs(){const el=document.getElementById("tabs");el.innerHTML="";
@@ -513,12 +527,13 @@ function denCardHTML(kind,title){
   return `<div class="den-card" data-den="${kind}"><div class="den-head"><span>${title}</span><span class="den-tot"></span></div>
     <div class="sess-list"></div>
     <div class="add-row"><span class="lbl">Net:</span><input class="qin den-in" type="number" min="0" step="1" placeholder="net"><button class="add-sess den-add">+ Deneme ekle</button></div></div>`;}
-function logCardHTML(key,title,presets){return `<div class="den-card" data-log2="${key}"><div class="den-head"><span>${title}</span><span class="den-tot"></span></div><div class="sess-list"></div><div class="add-row"><span class="lbl">Soru:</span>${presets.map(n=>`<button class="preset2" data-n="${n}">${n}</button>`).join("")}<input class="qin log2-in" type="number" min="1" placeholder="…"><button class="add-sess log2-add">+ Ekle</button></div></div>`;}
+function logCardHTML(key,title,presets){return `<div class="den-card fold" data-log2="${key}"><div class="den-head"><span>${title}</span><span class="den-right"><span class="den-tot"></span><span class="ph-chev">▾</span></span></div><div class="den-body"><div class="sess-list"></div><div class="add-row"><span class="lbl">Soru:</span>${presets.map(n=>`<button class="preset2" data-n="${n}">${n}</button>`).join("")}<input class="qin log2-in" type="number" min="1" placeholder="…"><button class="add-sess log2-add">+ Ekle</button></div></div></div>`;}
 function renderLog2(key){const card=document.querySelector(`.den-card[data-log2="${key}"]`);if(!card)return;const arr=logArr(key);const sum=sumLog(arr);
-  card.querySelector(".den-tot").textContent=arr.length?`${sum} soru · ${arr.length} kayıt`:"";
+  const tk=todayStr();const tSum=arr.reduce((a,e)=>a+(e.d===tk?(+e.q||0):0),0);
+  card.querySelector(".den-tot").textContent=`bugün ${tSum||"—"} · toplam ${sum}`;
   const list=card.querySelector(".sess-list");
   if(!arr.length)list.innerHTML='<div class="sess-empty">Henüz eklenmedi.</div>';
-  else list.innerHTML=arr.map((x,i)=>`<div class="sess"><span class="lab">${x.d?fmtShort(new Date(x.d)):"—"}</span><span class="q">${x.q} soru</span><button class="del log2-del" data-key="${key}" data-i="${i}">×</button></div>`).join("");}
+  else list.innerHTML=arr.map((x,i)=>({x,i})).reverse().map(({x,i})=>`<div class="sess"><span class="lab">${x.d?fmtShort(new Date(x.d)):"—"}</span><span class="q">${x.q} soru</span><button class="del log2-del" data-key="${key}" data-i="${i}">×</button></div>`).join("");}
 function renderDen(kind){const card=document.querySelector(`.den-card[data-den="${kind}"]`);if(!card)return;
   const arr=denArr(kind);const cnt=arr.length;const list=card.querySelector(".sess-list");
   if(kind==="kismi"){const by={};arr.forEach(x=>{const k=x.subj||"?";by[k]=(by[k]||0)+1;});const brk=Object.keys(by).map(k=>`${k} ${by[k]}`).join(" · ");
@@ -548,12 +563,17 @@ function fillMonth(el){if(el.dataset.filled)return;el.dataset.filled="1";const y
   for(let day=1;day<=dim;day++){const d=new Date(y,m,day);if(d<START||d>END)continue;const k=dstr(d);
     const items=(cal.get(k)||[]).slice().sort((a,b)=>a.order-b.order);
     let inner=items.length?items.map(x=>{const st=stageOf((prog[x.sk]||{})[x.id]);return `<span class="cd-item st${st}" style="--c:${x.color}"><span class="cdot"></span>${x.subj}: ${x.label}${x.round>1?` <b>T${x.round}</b>`:""}</span>`;}).join(""):'<span class="cd-rest">—</span>';
-    inner+='<span class="cd-pkg">＋ Günlük paket: 10 paragraf · 10 geometri · 10 problem</span>';
+    const L=prog._logs||{};
+    const parts=["paragraf","geometri","problem"].map(kk=>({lbl:kk,q:(L[kk]||[]).reduce((a,e)=>a+(e.d===k?(+e.q||0):0),0)}));
+    const dn=parts.filter(p=>p.q>0).length;
+    inner+=`<span class="cd-pkg${dn?" pk"+dn:""}">＋ Günlük paket: ${parts.map(p=>`10 ${p.lbl}${p.q>0?" ✓":""}`).join(" · ")}</span>`;
     rows+=`<div class="calday${k===todayKey?" today":""}"><div class="cd-date">${DAYS[d.getDay()]} · ${d.getDate()}</div><div class="cd-items">${inner}</div></div>`;}
   el.querySelector(".cm-body").innerHTML=rows;}
+function refreshCal(){document.querySelectorAll(".calmonth.open").forEach(el=>{delete el.dataset.filled;fillMonth(el);});}
 function renderGenelDash(){const g=globalTotals();
   document.getElementById("dash").innerHTML=`<div class="gcards">
     <div class="gcard grand"><div class="gv">${g.grand}</div><div class="gl">TOPLAM ÇÖZÜLEN SORU · her şey dahil</div></div>
+    <div class="gcard" style="border-color:color-mix(in srgb,var(--s2) 50%,transparent)"><div class="gv" style="color:var(--s2)">${todaySolved()}</div><div class="gl">BUGÜN çözülen soru</div></div>
     <div class="gcard"><div class="gv">${g.soru}</div><div class="gl">Konu soruları</div></div>
     <div class="gcard"><div class="gv" style="color:var(--s2)">${g.cik}</div><div class="gl">Çıkmış soru</div></div>
     <div class="gcard"><div class="gv">${g.pkg}</div><div class="gl">Günlük paket (P${g.pkgP}·G${g.pkgG}·Pr${g.pkgPr})</div></div>
@@ -663,11 +683,12 @@ document.getElementById("phases").addEventListener("click",e=>{
   if(cm){const mo=cm.parentElement;const willOpen=!mo.classList.contains("open");mo.classList.toggle("open");if(willOpen)fillMonth(mo);return;}
   const card=e.target.closest(".den-card");
   if(card){
+    if(card.classList.contains("fold")&&e.target.closest(".den-head")){card.classList.toggle("open");return;}
     if(card.dataset.log2!==undefined){const key=card.dataset.log2;
       const pr=e.target.closest(".preset2");
-      if(pr){logArr(key).push({q:+pr.dataset.n,d:todayStr()});save();renderLog2(key);refreshTop();return;}
-      if(e.target.closest(".log2-add")){const inp=card.querySelector(".log2-in");const n=parseInt(inp.value,10);if(n>0){logArr(key).push({q:n,d:todayStr()});save();renderLog2(key);refreshTop();inp.value="";}return;}
-      if(e.target.closest(".log2-del")){const i=+e.target.closest(".log2-del").dataset.i;logArr(key).splice(i,1);save();renderLog2(key);refreshTop();return;}
+      if(pr){logArr(key).push({q:+pr.dataset.n,d:todayStr()});save();renderLog2(key);refreshTop();refreshCal();return;}
+      if(e.target.closest(".log2-add")){const inp=card.querySelector(".log2-in");const n=parseInt(inp.value,10);if(n>0){logArr(key).push({q:n,d:todayStr()});save();renderLog2(key);refreshTop();refreshCal();inp.value="";}return;}
+      if(e.target.closest(".log2-del")){const i=+e.target.closest(".log2-del").dataset.i;logArr(key).splice(i,1);save();renderLog2(key);refreshTop();refreshCal();return;}
       return;}
     const kind=card.dataset.den;
     if(e.target.closest(".den-add")){const inp=card.querySelector(".den-in");const n=parseInt(inp.value,10);if(!isNaN(n)&&n>=0){const entry={q:n,d:todayStr()};if(kind==="kismi"){const sel=card.querySelector(".den-sel");entry.subj=sel?sel.value:"Karma";}denArr(kind).push(entry);save();renderDen(kind);refreshTop();inp.value="";}return;}
@@ -683,7 +704,7 @@ document.getElementById("phases").addEventListener("click",e=>{
 });
 document.getElementById("phases").addEventListener("keydown",e=>{if(e.key!=="Enter")return;
   if(e.target.classList.contains("den-in")){const card=e.target.closest(".den-card");const kind=card.dataset.den;const n=parseInt(e.target.value,10);if(!isNaN(n)&&n>=0){const entry={q:n,d:todayStr()};if(kind==="kismi"){const sel=card.querySelector(".den-sel");entry.subj=sel?sel.value:"Karma";}denArr(kind).push(entry);save();renderDen(kind);refreshTop();e.target.value="";}return;}
-  if(e.target.classList.contains("log2-in")){const card=e.target.closest(".den-card");const key=card.dataset.log2;const n=parseInt(e.target.value,10);if(n>0){logArr(key).push({q:n,d:todayStr()});save();renderLog2(key);refreshTop();e.target.value="";}return;}
+  if(e.target.classList.contains("log2-in")){const card=e.target.closest(".den-card");const key=card.dataset.log2;const n=parseInt(e.target.value,10);if(n>0){logArr(key).push({q:n,d:todayStr()});save();renderLog2(key);refreshTop();refreshCal();e.target.value="";}return;}
   if(e.target.classList.contains("qin")){const wrap=e.target.closest(".sub-wrap");if(!wrap)return;const key=e.target.dataset.log;const n=parseInt(e.target.value,10);if(n>0){addLog(tab().key,wrap.dataset.id,key,n);e.target.value="";}}
 });
 document.getElementById("expandAll").addEventListener("click",()=>{const any=[...document.querySelectorAll(".phase")].some(p=>!p.classList.contains("open"));document.querySelectorAll(".phase").forEach(p=>p.classList.toggle("open",any));});

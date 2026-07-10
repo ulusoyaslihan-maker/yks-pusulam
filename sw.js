@@ -1,5 +1,5 @@
 /* YKS Pusulam — çevrimdışı çalışma için service worker */
-const CACHE = "yks-pusulam-v2";
+const CACHE = "yks-pusulam-v3";
 const CORE = ["./", "./index.html", "./manifest.webmanifest"];
 
 self.addEventListener("install", (e) => {
